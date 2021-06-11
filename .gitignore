@@ -1,3 +1,5 @@
+# Added: Not include data in dataout
+dataout/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
