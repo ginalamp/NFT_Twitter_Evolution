@@ -113,3 +113,6 @@ def stem_and_remove_stopwords(tweet):
     '''
     # TODO: perhaps use Vader's stemming function instead of PorterStemmer
     return ' '.join([PorterStemmer().stem(word=word) for word in tweet.split() if word not in stop_words])
+
+if __name__ == "__main__":
+    run()

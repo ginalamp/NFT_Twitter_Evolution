@@ -142,3 +142,6 @@ def test_output(topic_number):
 
     automated_topic_grouping = sorted(csv[csv["maxtopic"] == topic_number].index)
     return prev_topic_grouping == automated_topic_grouping
+
+if __name__ == "__main__":
+    run()

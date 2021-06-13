@@ -179,3 +179,6 @@ def plot_sentiment_average_time(df_avg, topic):
     plt.xlabel('Day of May 2021')
     plt.savefig('dataout/sentiment/Topic{}_sentiment4_time.jpeg'.format(topic))
     plt.close()
+
+if __name__ == "__main__":
+    run()
