@@ -6,7 +6,10 @@ ISMTwitter Crypto Intra Community Analysis - ISMHons 2021
 
 ## Usage
 Runs all python scripts (`clean_corpus.py, topic_modelling.py, sentiment_analysis.py`) automatically.
-NOTE: need to run BTM scipt on cleaned corpus first (TODO automate this part too)
+
+NOTE: need to run BTM scipt on cleaned corpus first - currently the K20 files for the 100k tweets are
+explicitly added to `datain/topic_modelling`, but if a new corpus is used, we need to run the BTM
+algorithm on that corpus and add the output to this folder accordingly. (TODO automate this part too)
 
 ```python3 run_scripts.py```
 
