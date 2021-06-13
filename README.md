@@ -14,6 +14,9 @@ Can run any of the python scripts individually through
 
 ```python3 <file_name.py>```
 
+# Output
+Usable output is generated in `dataout/`
+
 ## Jupyter Notebook
 
 Automated pipeline through Jupyter Notebook:
