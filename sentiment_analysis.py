@@ -167,8 +167,8 @@ def plot_frequency_time(dates, topic):
     #plot tweet frequency over time
     plt.plot(dates['day'], dates['cleaned_tweet'])
     plt.title('Topic {}: Tweet Frequency'.format(topic))
-    plt.xlabel('Day of May 2021')
-    plt.ylabel('Count of Topic4 Tweets')
+    plt.xlabel('Day in month 2021')
+    plt.ylabel('Count of Topic {} Tweets'.format(topic))
     plt.savefig('dataout/sentiment/Topic{}_frequency.jpeg'.format(topic))
     plt.close()
 
@@ -176,7 +176,7 @@ def plot_sentiment_average_time(df_avg, topic):
     plt.plot(df_avg['day'], df_avg['compound'])
     plt.title('Topic {}: Sentiment Over Time'.format(topic))
     plt.ylabel('Average Polarity')
-    plt.xlabel('Day of May 2021')
+    plt.xlabel('Day in month 2021')
     plt.savefig('dataout/sentiment/Topic{}_sentiment4_time.jpeg'.format(topic))
     plt.close()
 
