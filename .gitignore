@@ -1,5 +1,22 @@
 # Added: Not include data in dataout
 dataout/
+
+# Added: Mac OS generated files
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+*.DS_Store
+ 
+# Added: Xcode generated files
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
