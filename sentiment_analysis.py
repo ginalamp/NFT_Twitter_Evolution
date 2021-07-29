@@ -16,7 +16,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
 
 # change to False to run for a specific topic
-run_all = False
+run_all = True
 # change to topic that you wish to run code for (if run_all -> False)
 atopic = 6
 
