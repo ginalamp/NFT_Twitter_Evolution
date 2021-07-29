@@ -37,7 +37,7 @@ def run():
         sentiment_analysis_per_topic(df, atopic)
 
     print("Find graphed results in dataout/sentiment/")
-    print("Finished running sentimen analysis...")
+    print("Finished running sentiment analysis...")
 
 
 def df_setup():
