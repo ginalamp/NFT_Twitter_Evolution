@@ -17,8 +17,13 @@ from nltk.corpus import stopwords
 from nltk import PorterStemmer
 
 # stop words and stemming
-remove_stop = False # set this to True if want to only remove stop words
+remove_stop = True # set this to True if want to only remove stop words
 stem_remove_stop = False # set this to True if want to stem AND remove stop words
+
+# add stop words
+stop_words = stopwords.words('english')
+stop_words.append('rt')
+stop_words.append('nft')
 
 def run():
     '''
@@ -28,10 +33,6 @@ def run():
     print("Cleaning corpus...")
     df = load_data()
 
-    # add stop words
-    stop_words = stopwords.words('english')
-    stop_words.append('rt')
-    stop_words.append('nft')
 
     # clean data text line by line
     cleaned_text = []
@@ -85,7 +86,7 @@ def clean_tweet(tweet):
 
     # TODO - decide whether want to stem and remove stop words (default set to False)
     if remove_stop:
-        tweet = remove_stopwords()
+        tweet = remove_stopwords(tweet)
     elif stem_remove_stop:
         tweet = stem_and_remove_stopwords()
     else:
