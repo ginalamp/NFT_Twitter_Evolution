@@ -25,6 +25,12 @@ stop_words = stopwords.words('english')
 stop_words.append('rt')
 stop_words.append('nft')
 
+# file paths
+TWEET_CORPUS_INPUT_FILE = "datain/clean/sample100k.jsonl"
+CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
+# TWEET_CORPUS_INPUT_FILE = "datain/clean/largest_community_tweets.jsonl"
+# CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community.csv"
+
 def run():
     '''
     Main running code that executes all cleaning corpus functions in the
@@ -44,7 +50,7 @@ def run():
 
     # output data text, cleaned_tweets, and createdAt to csv
     selected_columns = ["created_at", "corpus", "cleaned_tweet"]
-    df.to_csv('datain/topic_modelling/cleaned_tweets.csv', columns = selected_columns)
+    df.to_csv(TWEET_CORPUS_INPUT_FILE, columns = selected_columns)
 
     print("Finished cleaning corpus...")
 
@@ -56,7 +62,7 @@ def load_data():
     @return imported english, non-retweeted data
     '''
     #import the data
-    file_path = "datain/clean/sample100k.jsonl"
+    file_path = TWEET_CORPUS_INPUT_FILE
     data = pd.read_json(file_path, lines=True)
 
     # get first 100k lines of a larger dataset
