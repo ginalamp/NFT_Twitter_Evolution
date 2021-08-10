@@ -1,6 +1,9 @@
 # Added: Not include data in dataout
 dataout/
 
+# Added: not include largest community data
+*largest_community*
+
 # Added: Mac OS generated files
 .DS_Store?
 ehthumbs.db

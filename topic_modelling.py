@@ -24,6 +24,14 @@ import numpy as np
 from collections import Counter
 import matplotlib.pyplot as plt
 
+# TODO: still need to update these files with the largest community's topic modelling files
+# file paths
+CONFUSION_MATRIX_INPUT_FILE_PZ_D = "datain/topic_modelling/k20.pz_d"
+TOPIC_PROBABILITIES_INTPUT_FILE_PZ = "datain/topic_modelling/k20.pz"
+TWEET_CORPUS_INPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
+
+TOPIC_OUTPUT_FILE = "datain/sentiment/grouped-by-topic_with_date.csv"
+# TOPIC_OUTPUT_FILE = "datain/sentiment/largest_community_grouped-by-topic_with_date.csv"
 
 def run():
     '''
@@ -31,7 +39,6 @@ def run():
     correct order for the pipeline.
     '''
     print("Applying topic modelling to BTM output and cleaned corpus...")
-
     confusion_matrix, topic_probabilities, tweet_corpus = load_data()
 
     # sort confusion matrix according to highest topic probability
@@ -53,11 +60,9 @@ def run():
     # group topics and export selected columns to csv
     df = group_topics(df)
     selected_columns = ["maxtopic", "created_at", "corpus", "cleaned_tweet"]
-    df.to_csv('datain/sentiment/grouped-by-topic_with_date.csv', columns = selected_columns)
+    df.to_csv(TOPIC_OUTPUT_FILE, columns = selected_columns)
 
     plot_topic_ratio(df)
-    # uncomment to run test
-    # run_test()
     print("Finished topic modelling...")
 
 
@@ -68,15 +73,16 @@ def load_data():
 
     @return confusion_matrix, topic_probabilities, tweet_corpus
     '''
+
     # load confusion matrix (pz_d) BTM output
-    confusion_matrix = np.loadtxt("datain/topic_modelling/k20.pz_d")
+    confusion_matrix = np.loadtxt(CONFUSION_MATRIX_INPUT_FILE_PZ_D)
     confusion_matrix = pd.DataFrame(confusion_matrix)
 
     # load topic label probabilities (pz) BTM output
-    topic_probabilities = np.loadtxt("datain/topic_modelling/k20.pz")
+    topic_probabilities = np.loadtxt(TOPIC_PROBABILITIES_INTPUT_FILE_PZ)
 
     # load teet corpus data
-    tweet_corpus = pd.read_csv("datain/topic_modelling/cleaned_tweets.csv")
+    tweet_corpus = pd.read_csv(TWEET_CORPUS_INPUT_FILE)
     tweet_corpus = tweet_corpus.drop("Unnamed: 0", axis=1)
 
     return confusion_matrix, topic_probabilities, tweet_corpus
@@ -124,24 +130,24 @@ def plot_topic_ratio(csv):
     plt.savefig('dataout/topic_modelling/topic_ratios.jpeg')
     plt.close()
 
-def run_test():
-    # test if prev topic classification is the same as new automated topic classification
-    comparison = []
-    for topic in range(20):
-        comparison.append(test_output(topic))
-    # check if all elements in list are True
-    print("Topic modelling tests passed: {}".format(all(comparison)))
+# def run_test():
+#     # test if prev topic classification is the same as new automated topic classification
+#     comparison = []
+#     for topic in range(20):
+#         comparison.append(test_output(topic))
+#     # check if all elements in list are True
+#     print("Topic modelling tests passed: {}".format(all(comparison)))
 
 
-def test_output(topic_number):
-    '''
-        Check if previous topic grouping is the same as the automated coding topic grouping
-    '''
-    prev_topic_grouping = pd.read_csv("test/grouped-by-topic_with_date.csv")
-    prev_topic_grouping = sorted(prev_topic_grouping[prev_topic_grouping["maxtopic"] == topic_number]["Topic (Unsorted)"])
-
-    automated_topic_grouping = sorted(csv[csv["maxtopic"] == topic_number].index)
-    return prev_topic_grouping == automated_topic_grouping
+# def test_output(topic_number):
+#     '''
+#         Check if previous topic grouping is the same as the automated coding topic grouping
+#     '''
+#     prev_topic_grouping = pd.read_csv("test/grouped-by-topic_with_date.csv")
+#     prev_topic_grouping = sorted(prev_topic_grouping[prev_topic_grouping["maxtopic"] == topic_number]["Topic (Unsorted)"])
+#
+#     automated_topic_grouping = sorted(csv[csv["maxtopic"] == topic_number].index)
+#     return prev_topic_grouping == automated_topic_grouping
 
 if __name__ == "__main__":
     run()

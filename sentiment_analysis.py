@@ -20,13 +20,16 @@ run_all = True
 # change to topic that you wish to run code for (if run_all -> False)
 atopic = 6
 
+# file paths
+SENTIMENT_INPUT_FILE = "datain/sentiment/grouped-by-topic_with_date.csv"
+# SENTIMENT_INPUT_FILE = "datain/sentiment/largest_community_grouped-by-topic_with_date.csv"
+
 def run():
     '''
     Main running code that executes all sentiment analysis functions in the
     correct order for the pipeline.
     '''
     print("Running sentiment analysis...")
-
     df = df_setup()
     if run_all:
         # run for all topics
@@ -35,9 +38,7 @@ def run():
     else:
         # run for one topic
         sentiment_analysis_per_topic(df, atopic)
-
-    print("Find graphed results in dataout/sentiment/")
-    print("Finished running sentiment analysis...")
+    print("Finished running sentiment analysis...\nFind graphed results in dataout/sentiment/")
 
 
 def df_setup():
@@ -47,7 +48,7 @@ def df_setup():
     @return DataFrame
     '''
     # read in data produced by topic_modelling.ipynb
-    df = pd.read_csv('datain/sentiment/grouped-by-topic_with_date.csv')
+    df = pd.read_csv(SENTIMENT_INPUT_FILE)
     df = df[['Unnamed: 0', 'created_at', 'maxtopic', 'corpus', "cleaned_tweet"]].copy()
     df = df.rename({'Unnamed: 0': 'tweet_index'}, axis=1)
 
