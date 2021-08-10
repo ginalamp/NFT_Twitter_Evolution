@@ -7,6 +7,10 @@ ehthumbs.db
 Icon?
 Thumbs.db
 *.DS_Store
+
+# Added: R topic modeling stuffs
+*.nb.html
+LDA_topics/.Rhistory
  
 # Added: Xcode generated files
 *.pbxuser

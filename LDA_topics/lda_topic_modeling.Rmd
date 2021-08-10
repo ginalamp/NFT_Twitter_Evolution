@@ -158,14 +158,16 @@ plot_overall_topics <- function(tidy_tweets_in, nr_topics) {
     filter(row_number()<=TOP_WORDS) # force number of terms to be TOP_WORDS per topic
   
   # plot top terms per topic (sorted by beta relevance)
-  top_terms %>%
+  topics_plot <- top_terms %>%
     mutate(term = reorder_within(term, beta, topic)) %>%
     ggplot(aes(beta, term, fill = factor(topic))) +
     geom_col(show.legend = FALSE) +
-    labs(title = paste("Covid-related Topics between Jan-June 2021")) +
+    labs(title = paste("NFT-related Topics")) +
     facet_wrap(~ topic, scales = "free") + # combine plot for each topic
     scale_y_reordered() +
     custom_column_basic_theme()
+  # save plot as jpeg
+  ggsave(paste("model_for_", nr_topics, "_topics.jpeg", sep = ""), plot = topics_plot) 
 }
 ```
 

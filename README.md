@@ -33,3 +33,6 @@ Automated pipeline through Jupyter Notebook:
 1. clean_corpus.ipynb
 2. topic_modelling.ipynb
 3. sentiment_analysis.ipynb
+
+## LDA topic modeling
+lda_tuning.Rmd and lda_topic_modeling.Rmd use the tweets in data/cleaned_tweets.csv for tuning and modeling topics respectively. Plots are output and saved to jpeg files.
