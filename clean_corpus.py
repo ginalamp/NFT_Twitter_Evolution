@@ -12,6 +12,7 @@ import pandas as pd
 import re
 import html
 import nltk
+import string
 # nltk.download() # run this the first time you run nltk
 from nltk.corpus import stopwords
 from nltk import PorterStemmer
@@ -22,14 +23,16 @@ stem_remove_stop = False # set this to True if want to stem AND remove stop word
 
 # add stop words
 stop_words = stopwords.words('english')
+alpha_lower_list = list(string.ascii_lowercase)
+stop_words.extend(alpha_lower_list) # appends lowercase single letters of alphabet to stopwords.
 stop_words.append('rt')
 stop_words.append('nft')
 
 # file paths
-TWEET_CORPUS_INPUT_FILE = "datain/clean/sample100k.jsonl"
-CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
-# TWEET_CORPUS_INPUT_FILE = "datain/clean/largest_community_tweets.jsonl"
-# CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community.csv"
+# TWEET_CORPUS_INPUT_FILE = "datain/clean/sample100k.jsonl"
+# CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
+TWEET_CORPUS_INPUT_FILE = "datain/clean/largest_community_tweets.jsonl"
+CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community2.csv"
 
 def run():
     '''
@@ -49,8 +52,8 @@ def run():
     df['cleaned_tweet'] = cleaned_df['cleaned_tweet']
 
     # output data text, cleaned_tweets, and createdAt to csv
-    selected_columns = ["created_at", "corpus", "cleaned_tweet"]
-    df.to_csv(TWEET_CORPUS_INPUT_FILE, columns = selected_columns)
+    selected_columns = ["created_at", "id", "cleaned_tweet"]
+    df.to_csv(CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns)
 
     print("Finished cleaning corpus...")
 
@@ -86,7 +89,8 @@ def clean_tweet(tweet):
     '''
     tweet = str.lower(tweet)
     tweet = ' '.join(re.sub("(@[A-Za-z0-9_]+)|(#[A-Za-z0-9_]+)", " ", tweet).split()) # remove mentions and hashtags
-    tweet = re.sub("(http\S+|http)", "", tweet, flags=re.MULTILINE) # remove links
+    tweet = re.sub("(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)", "", tweet, flags=re.MULTILINE) # remove links
+    tweet = re.sub("0x([\da-z\.-]+)", "", tweet, flags=re.MULTILINE) # remove addresses/pointers
     tweet = re.sub('\&\w+', "", tweet) # remove html entities (example &amp)
     tweet = re.sub('[^a-zA-Z# ]+', ' ', tweet) # make sure tweet is only letters
 
