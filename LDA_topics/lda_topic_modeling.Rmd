@@ -45,6 +45,7 @@ NUM_TOPICS_4 <- 4 # all outlet topics per month have this number of topics
 NUM_TOPICS_5 <- 5
 NUM_TOPICS_6 <- 6
 NUM_TOPICS_7 <- 7
+NUM_TOPICS_9 <- 9
 ```
 
 ```{r read data}
@@ -106,7 +107,7 @@ lda_tuning <- function(orgs_dtm) {
 get_topics <- function(word_counts, nr_topics) {
   # create document term matrix from word count
   orgs_dtm <- word_counts %>%
-    cast_dtm(corpus, word, n)
+    cast_dtm(id, word, n)
   
   # checking for ideal number of topics (NOTE: set to TRUE to run ldatuning)
   if (TUNING) {
@@ -127,8 +128,8 @@ overall_topics <- function(tidy_tweets_in, nr_topics) {
   # word count by tweet
   # TODO: check whether it should be by tweet or by user (for data analysis proj it was media org)
   word_counts <- tidy_tweets_in %>%
-    select(corpus, word, created_at) %>%
-    count(corpus, word, sort = TRUE) %>% # count how often each org uses each word
+    select(id, word, created_at) %>%
+    count(id, word, sort = TRUE) %>% # count how often each org uses each word
     ungroup()
   
   orgs_topics_overall <- get_topics(word_counts, nr_topics)
@@ -172,5 +173,5 @@ plot_overall_topics <- function(tidy_tweets_in, nr_topics) {
 ```
 
 ```{r plot overall topics using selected number of topics (lda tuning)}
-plot_overall_topics(tidy_tweets, NUM_TOPICS_7)
+plot_overall_topics(tidy_tweets, NUM_TOPICS_9)
 ```
