@@ -32,7 +32,9 @@ stop_words.append('nft')
 # TWEET_CORPUS_INPUT_FILE = "datain/clean/sample100k.jsonl"
 # CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
 TWEET_CORPUS_INPUT_FILE = "datain/clean/largest_community_tweets.jsonl"
-CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community2.csv"
+CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community.csv"
+BTM_CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community_btm.csv"
+BTM2_CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community_btm2.csv"
 
 def run():
     '''
@@ -54,6 +56,12 @@ def run():
     # output data text, cleaned_tweets, and createdAt to csv
     selected_columns = ["created_at", "id", "cleaned_tweet"]
     df.to_csv(CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns)
+
+    # selected_columns = ["cleaned_tweet"]
+    # df.to_csv(BTM_CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns)
+    #
+    # selected_columns = ["id", "cleaned_tweet"]
+    # df.to_csv(BTM2_CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns, index=None)
 
     print("Finished cleaning corpus...")
 
