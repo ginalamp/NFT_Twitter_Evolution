@@ -36,8 +36,8 @@ library(reshape2)
 library(vader) # sentiment analysis
 ```
 ```{r global (static) variables}
-LOWER <- 2 # lower bound for range of topic numbers to check
-UPPER <- 8 # upper bound for range of topic numbers to check
+LOWER <- 5 # lower bound for range of topic numbers to check
+UPPER <- 15 # upper bound for range of topic numbers to check
 ```
 
 ```{r read data}
@@ -81,13 +81,13 @@ x_lda_tuning <- function(tidy_tweets_in) {
   # word count by tweet
   # TODO: check whether it should be by tweet or by user (for data analysis proj it was media org)
   word_counts <- tidy_tweets_in %>%
-    select(corpus, word, created_at) %>%
-    count(corpus, word, sort = TRUE) %>% # count how often each org uses each word
+    select(id, word, created_at) %>%
+    count(id, word, sort = TRUE) %>% # count how often each org uses each word
     ungroup()
   
   # create document term matrix from word count
   orgs_dtm <- word_counts %>%
-    cast_dtm(corpus, word, n)
+    cast_dtm(id, word, n)
   
   # checking for ideal number of topics
   result <- FindTopicsNumber(
@@ -99,7 +99,7 @@ x_lda_tuning <- function(tidy_tweets_in) {
       mc.cores = 2L,
       verbose = TRUE
     )
-  # choose extreme in following plots as optimal number of topics
+  # choose extreme in following plots as optimal number of topics 
   # plot saved as jpeg
   jpeg(file=paste("tuning_range_", LOWER, "_", UPPER, ".jpeg", sep = ""))
   FindTopicsNumber_plot(result)
