@@ -7,9 +7,10 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 # file paths
-FREQUENCY_INPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
-# FREQUENCY_INPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community.csv"
-
+# FREQUENCY_INPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
+# FREQUENCY_OUTPUT_FILE = "dataout/general/Total_tweet_frequency.jpeg"
+FREQUENCY_INPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community.csv"
+FREQUENCY_OUTPUT_FILE = "dataout/general/Total_tweet_frequency_largest_community.jpeg"
 def run():
     print("Running tweet frequency")
     # load tweet corpus data
@@ -29,6 +30,7 @@ def run():
 
     # group tweets by date and count number of entries per day
     dates = df.groupby('date').count()
+    plot_frequency_time(dates)
     print("Finished running tweet frequency")
 
 
@@ -38,15 +40,15 @@ def plot_frequency_time(dates):
     @param dates - df with count of number of tweets posted grouped by date
     '''
     fig, ax = plt.subplots()
-    ax.plot(dates.index, 'corpus', data=dates)
+    ax.plot(dates.index, 'cleaned_tweet', data=dates)
     # Major ticks every 6 months.
     fmt_half_year = mdates.MonthLocator(interval=1)
     ax.xaxis.set_major_locator(fmt_half_year)
     # plot
-    plt.title('Tweet Frequency over time: 1 Feb - 31 May')
+    plt.title('Largest Community Tweet Frequency over time: 1 Feb - 31 May')
     plt.xlabel('Date')
     plt.ylabel('Number of Tweets')
-    plt.savefig('dataout/general/Total_tweet_frequency.jpeg')
+    plt.savefig(FREQUENCY_OUTPUT_FILE)
     plt.close()
 
 if __name__ == "__main__":
