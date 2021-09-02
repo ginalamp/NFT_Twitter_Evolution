@@ -59,6 +59,12 @@ model  <- BTM(data = df, k = numTopics, iter = numGibbsIter, trace = gibbsEvolut
 ```
 
 ```{r}
+# I think here is where the logLik code should go (after creating the model)
+fit <- logLik(model)
+fit$ll
+```
+
+```{r}
 # theta: a vector with the topic probability p(z) which is determinated by the overall proportions of biterms in it
 model$theta
 ```
