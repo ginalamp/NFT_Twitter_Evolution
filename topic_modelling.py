@@ -1,6 +1,10 @@
 #
 
 '''
+NBBBBBBB - this code has been replaced with R code available in the BTM/LDA folders
+THIS IS OUT DATED
+
+
 Groups tweets with the same topic together.
 
 NOTE: the BTM algorithm needs to be run first such that it's output can be used
@@ -129,25 +133,6 @@ def plot_topic_ratio(csv):
     plt.title('Ratio of tweets per topic')
     plt.savefig('dataout/topic_modelling/topic_ratios.jpeg')
     plt.close()
-
-# def run_test():
-#     # test if prev topic classification is the same as new automated topic classification
-#     comparison = []
-#     for topic in range(20):
-#         comparison.append(test_output(topic))
-#     # check if all elements in list are True
-#     print("Topic modelling tests passed: {}".format(all(comparison)))
-
-
-# def test_output(topic_number):
-#     '''
-#         Check if previous topic grouping is the same as the automated coding topic grouping
-#     '''
-#     prev_topic_grouping = pd.read_csv("test/grouped-by-topic_with_date.csv")
-#     prev_topic_grouping = sorted(prev_topic_grouping[prev_topic_grouping["maxtopic"] == topic_number]["Topic (Unsorted)"])
-#
-#     automated_topic_grouping = sorted(csv[csv["maxtopic"] == topic_number].index)
-#     return prev_topic_grouping == automated_topic_grouping
 
 if __name__ == "__main__":
     run()
