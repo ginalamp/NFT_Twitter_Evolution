@@ -45,13 +45,8 @@ def run():
     print("Cleaning corpus...")
     df = load_data()
 
-    # clean data text line by line
-    cleaned_text = []
-    for index in df.index:
-        text = df["corpus"][index]
-        cleaned_text.append(clean_tweet(text))
-    cleaned_df = pd.DataFrame(cleaned_text[0:], columns=["cleaned_tweet"])
-    df['cleaned_tweet'] = cleaned_df['cleaned_tweet']
+    # clean data text line by line and create column with cleaned tweets
+    df['cleaned_tweet'] = df['corpus'].apply(clean_tweet)
 
     # output id, cleaned_tweets, and createdAt to csv
     selected_columns = ["created_at", "id", "cleaned_tweet"]
