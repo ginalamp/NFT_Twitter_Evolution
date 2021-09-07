@@ -7,10 +7,13 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 # file paths
-# FREQUENCY_INPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
-# FREQUENCY_OUTPUT_FILE = "dataout/general/Total_tweet_frequency.jpeg"
 FREQUENCY_INPUT_FILE = "datain/topic_modelling/cleaned_tweets_largest_community.csv"
 FREQUENCY_OUTPUT_FILE = "dataout/general/Total_tweet_frequency_largest_community.jpeg"
+
+# file paths for sample data
+# FREQUENCY_INPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
+# FREQUENCY_OUTPUT_FILE = "dataout/general/Total_tweet_frequency.jpeg"
+
 def run():
     print("Running tweet frequency")
     # load tweet corpus data
