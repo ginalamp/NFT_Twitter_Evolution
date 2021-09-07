@@ -19,7 +19,7 @@ library(concaveman)
 ```
 
 ```{r}
-df <- read.csv("data/cleaned_tweets_largest_community_btm.csv")
+df <- read.csv("../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv")
 df
 ```
 ```{r}
