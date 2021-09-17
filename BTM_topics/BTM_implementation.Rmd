@@ -48,7 +48,7 @@ df
 ```
 
 ```{r}
-numTopics <- 9
+numTopics <- 12
 numGibbsIter <- 1000
 gibbsEvolution <- 100
 ```
@@ -99,22 +99,22 @@ plot(model)
 # Write results to files
 ```{r}
 # phi: a matrix of dimension W x K with one row for each token in the data. This matrix contains the probability of the token given the topic P(w|z). the rownames of the matrix indicate the token w
-write.csv(x=model$phi, file="model_phi.csv")
+write.csv(x=model$phi, file=numTopics+"model_phi.csv")
 
 # a matrix containing containing P(z|d) - the probability of the topic given the biterms.
 # The matrix has one row for each unique doc_id (context identifier) which contains words part of the dictionary of the BTM model and has K columns, one for each topic.
-write.csv(x=scores, file="model_scores.csv")
+write.csv(x=scores, file=numTopics+"model_scores.csv")
 
 # theta: a vector with the topic probability p(z) which is determinated by the overall proportions of biterms in it
-write.csv(x=model$theta, file="model_theta.csv")
+write.csv(x=model$theta, file=numTopics+"model_theta.csv")
 ```
 
 ```{r}
 # alpha: the symmetric dirichlet prior probability of a topic P(z)
-write.csv(x=model$alpha, file="model_alpha.csv")
+write.csv(x=model$alpha, file=numTopics+"model_alpha.csv")
 
 # beta: the symmetric dirichlet prior probability of a word given the topic P(w|z)
-write.csv(x=model$beta, file="model_beta.csv")
+write.csv(x=model$beta, file=numTopics+"model_beta.csv")
 ```
 
 
