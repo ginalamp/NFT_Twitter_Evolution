@@ -48,14 +48,14 @@ df
 ```
 
 ```{r}
-numTopics <- 12
+numTopics <- 21
 numGibbsIter <- 1000
 gibbsEvolution <- 100
 ```
 
 ```{r}
 set.seed(1234)
-model  <- BTM(data = df, k = numTopics, iter = numGibbsIter, trace = gibbsEvolution)
+model <- BTM(data = df, k = numTopics, iter = numGibbsIter, trace = gibbsEvolution)
 ```
 
 ```{r}
