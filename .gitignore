@@ -3,6 +3,7 @@
 dataout/
 *largest_community*
 *.html
+tweets/
 
 # Created by https://www.toptal.com/developers/gitignore/api/r,python,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=r,python,macos
