@@ -1,7 +1,7 @@
 '''
 Run all cleaning, topic modelling, and sentiment analysis scripts
 '''
-import frequency, clean_corpus_for_btm, sentiment_analysis, clean_corpus_for_sentiment
+import frequency, clean_corpus_for_btm, clean_corpus_for_sentiment
 
 import os # creating directories
 
@@ -22,4 +22,4 @@ if __name__ == "__main__":
     clean_corpus_for_sentiment.run() # sentiment cleaning
     frequency.run()
     # old.topic_modelling.run() # old
-    sentiment_analysis.run()
+    # sentiment_analysis.run() # old

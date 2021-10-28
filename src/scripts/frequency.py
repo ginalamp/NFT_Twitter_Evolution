@@ -1,7 +1,6 @@
 '''
 Plot tweet frequency over time for large dataset
 '''
-import os # creating directories
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -11,13 +10,19 @@ import matplotlib.dates as mdates
 # FREQUENCY_OUTPUT_FILE = "../dataout/general/Total_tweet_frequency_largest_community.jpeg"
 
 # file paths for sample data
-FREQUENCY_INPUT_FILE = "../datain/topic_modelling/cleaned_tweets.csv"
-FREQUENCY_OUTPUT_FILE = "../dataout/general/Total_tweet_frequency.jpeg"
+# FREQUENCY_INPUT_FILE = "../datain/topic_modelling/cleaned_tweets.csv"
+# FREQUENCY_OUTPUT_FILE = "../dataout/general/Total_tweet_frequency.jpeg"
+
+DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
+# DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_topic.csv" # largest topic
+
+DATA_OUT = "../dataout/general/overall_tweet_frequency.jpeg" # overall tweets
+# DATA_OUT = "../dataout/general/largest_topic_tweet_frequency.jpeg" # largest topic
 
 def run():
     print("Running tweet frequency")
     # load tweet corpus data
-    df = pd.read_csv(FREQUENCY_INPUT_FILE)
+    df = pd.read_csv(DATA_IN)
     df = df.drop("Unnamed: 0", axis=1)
 
     # remove any null created_at values from dataframe
@@ -51,7 +56,7 @@ def plot_frequency_time(dates):
     plt.title('Largest Community Tweet Frequency over time: 1 Feb - 31 May')
     plt.xlabel('Date')
     plt.ylabel('Number of Tweets')
-    plt.savefig(FREQUENCY_OUTPUT_FILE)
+    plt.savefig(DATA_OUT)
     plt.close()
 
 if __name__ == "__main__":
