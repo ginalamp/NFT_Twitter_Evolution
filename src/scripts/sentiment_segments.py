@@ -1,8 +1,6 @@
 # Outputs overall sentiment (with rounded polarity) and sentiment over time (frequency bins).
 # Also computes overall average sentiment.
 
-# TODO: all these functions (except run) are the same as in one_topic_flow.py's sentiment section
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates # plot sentiment over time
@@ -18,7 +16,11 @@ SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = '../dataout/sentiment/sentiment_per_segmen
 
 def run():
     print("running overall sentiment analysis segments...")
-    df = clean_data()
+    # load cleaned tweet corpus data
+    df = pd.read_csv(DATA_IN)
+    df = df.drop("Unnamed: 0", axis=1)
+
+    df = clean_sentiment_data(df)
 
     df = sentiment_polarity_score(df)
     # segments
@@ -27,17 +29,12 @@ def run():
     print("Average sentiment for overall is:", avg_sentiment)
 
 
-def clean_data():
+def clean_sentiment_data(df):
     '''
     Load & clean data
-    TODO: this is the same function as in one_topic_flow.py
 
     @return df cleaned df
     '''
-    # load cleaned tweet corpus data
-    df = pd.read_csv(DATA_IN)
-    df = df.drop("Unnamed: 0", axis=1)
-
     # remove all null created_at values from dataframe
     df = df.drop(df[df['created_at'].isnull()].index)
     df = df.drop(df[df['cleaned_tweet'].isnull()].index)
@@ -54,7 +51,6 @@ def clean_data():
 
 
 def sentiment_polarity_score(df):
-    # TODO: this is the same function as in one_topic_flow.py
     analyzer = SentimentIntensityAnalyzer()
 
     # add polarity scores to df
@@ -80,7 +76,6 @@ def sentiment_polarity_score(df):
 def calc_polarity(x, bound):
     '''
     Round polarity up/down based on bound.
-    # TODO: this is the same function as in one_topic_flow.py
     '''
     if x < -bound:
         return -1
@@ -92,7 +87,6 @@ def calc_polarity(x, bound):
 def plot_rounded_polarity(num_rounded_sentiments):
     '''
     Plot rounded polariry
-     # TODO: this is the same function as in one_topic_flow.py
     '''
     # plot rounded negative, neutral, and positive sentiment amounts
     plt.bar(num_rounded_sentiments.index, num_rounded_sentiments["compound"])
