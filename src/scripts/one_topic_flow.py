@@ -29,7 +29,7 @@ def run():
     df = topic_modelling()
     avg_sentiment = sentiment_analysis(df)
 
-    print("Average sentiment for this topic is:, ", avg_sentiment)
+    print("Average sentiment for this topic is:", avg_sentiment)
 
 def topic_modelling():
     '''
@@ -181,6 +181,7 @@ def sentiment_get_matching_topic_data(df):
 def clean_topic_sentiment_df(df):
     '''
     Clean topic subset data.
+    TODO: this is the same function as in sentiment_segment.py
 
     @param df
     @return df dataframe with removed fields based on null values & added date/time values
@@ -202,6 +203,9 @@ def clean_topic_sentiment_df(df):
     return df
 
 def sentiment_polarity_score(df):
+    '''
+    Calculate sentiment vader polarity score
+    '''
     analyzer = SentimentIntensityAnalyzer()
 
     # add polarity scores to df
