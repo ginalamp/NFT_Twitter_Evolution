@@ -48,7 +48,7 @@ df
 ```
 
 ```{r}
-numTopics <- 21
+numTopics <- 11
 numGibbsIter <- 1000
 gibbsEvolution <- 100
 ```
@@ -60,6 +60,10 @@ model <- BTM(data = df, k = numTopics, iter = numGibbsIter, trace = gibbsEvoluti
 
 ```{r}
 # I think here is where the logLik code should go (after creating the model)
+```
+
+
+```{r}
 fit <- logLik(model)
 fit$ll
 ```
@@ -96,6 +100,27 @@ scores
 ```{r}
 plot(model)
 ```
+
+```{r}
+# https://rdrr.io/cran/textplot/man/plot.BTM.html
+
+plot(model, labels = 1:model$K)
+```
+
+```{r}
+plot(model, labels = seq_len(model$K))
+```
+
+```{r}
+# This complains
+# plot(model, which = 7:11, labels = c("topic 7", "topic 8", "topic 9", "topic 10", "topic 11"))
+```
+
+```{r}
+plot(model, which = 1:9, labels = 1:9)
+```
+
+
 # Write results to files
 ```{r}
 # phi: a matrix of dimension W x K with one row for each token in the data. This matrix contains the probability of the token given the topic P(w|z). the rownames of the matrix indicate the token w
