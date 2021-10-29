@@ -1,27 +1,41 @@
 # Change in biggest topic overall's sentiment over time (per segment)
 
 import pandas as pd
-import numpy as np
+# import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates # plot sentiment over time
+# import matplotlib.dates as mdates # plot sentiment over time
 
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer # vader sentiment analysis
+# from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer # vader sentiment analysis
 
 from collections import Counter # count number of tweets
 
 import sentiment_segments # sentiment analysis functions
 
-NUM_SEGMENTS = 35 # TODO: change this based on data
+NUM_SEGMENTS = 40 # decided on 40 segments for largest topic
 
 # Input/output files
-# TODO: change file names based on need
-INPUT_FILE = "../BTM_topics/dataout/13_model_scores.csv" # 13 topics (TODO: need to change to 11 for most optimal)
-TOPIC_DISTRIBUTION_OUT = "../dataout/topic_modelling/topic_distribution_maxtopic.jpeg"
-TOPIC_ID_OUT = "../datain/sentiment/maxtopic-ids.csv"
-CLEANED_SENTIMENT_DATA = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
-LARGEST_TOPIC_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_largest_topic.csv"
-TOPIC_ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_largest_topic_sentiment.jpeg"
-SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = "../dataout/sentiment/sentiment_per_segment_largest_topic.jpeg"
+BTM_SCORES_DATA_IN = "../BTM_topics/dataout/11_model_scores.csv" # 11 topics is the most optimal
+BTM_DATA_IN_PREFIX = "../datain/topic_modelling/"
+BTM_DATA_OUT_PREFIX = "../dataout/topic_modelling/"
+
+SENTIMENT_DATA_IN_PREFIX = "../datain/sentiment/"
+SENTIMENT_DATA_OUT_PREFIX = "../dataout/sentiment/"
+
+# MODEL_SCORES_INPUT = BTM_DATA_IN_PREFIX + "11_model_scores.csv" # 11 topics is the most optimal
+# TOPIC_DISTRIBUTION_OUT = BTM_DATA_OUT_PREFIX + "topic_distribution_maxtopic.jpeg"
+# TOPIC_ID_OUT = SENTIMENT_DATA_IN_PREFIX + "maxtopic-ids.csv"
+# CLEANED_SENTIMENT_DATA = SENTIMENT_DATA_IN_PREFIX + "cleaned_tweets_for_sentiment.csv"
+# LARGEST_TOPIC_DATA_OUT = BTM_DATA_IN_PREFIX + "cleaned_tweets_largest_topic.csv"
+# TOPIC_ROUNDED_POLARITY_OUT = SENTIMENT_DATA_OUT_PREFIX + "rounded_largest_topic_sentiment.jpeg" # TODO: add as arguments to sentiment
+# SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = SENTIMENT_DATA_OUT_PREFIX + "sentiment_per_segment_largest_topic.jpeg" # TODO: add as arguments to sentiment
+
+# INPUT_FILE = "../BTM_topics/dataout/11_model_scores.csv" # 11 topics is the most optimal
+# TOPIC_DISTRIBUTION_OUT = "../dataout/topic_modelling/topic_distribution_maxtopic.jpeg"
+# TOPIC_ID_OUT = "../datain/sentiment/maxtopic-ids.csv"
+# CLEANED_SENTIMENT_DATA = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
+# LARGEST_TOPIC_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_largest_topic.csv"
+# TOPIC_ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_largest_topic_sentiment.jpeg"
+# SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = "../dataout/sentiment/sentiment_per_segment_largest_topic.jpeg"
 
 def run():
     '''
@@ -52,10 +66,12 @@ def sentiment_analysis(df):
     # sentiment analysis
     df = sentiment_get_matching_topic_data(df)
     df = sentiment_segments.clean_sentiment_data(df)
-    df = sentiment_segments.sentiment_polarity_score(df)
+    filename = SENTIMENT_DATA_OUT_PREFIX + "rounded_largest_topic_sentiment.jpeg"
+    df = sentiment_segments.sentiment_polarity_score(df, filename)
     # segments
-    df, sub_dfs = sentiment_segments.split_data_segments(df)
-    avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs)
+    df, sub_dfs = sentiment_segments.split_data_segments(df, NUM_SEGMENTS)
+    filename = SENTIMENT_DATA_OUT_PREFIX + "sentiment_per_segment_largest_topic.jpeg"
+    avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, filename)
 
 
     return avg_sentiment
@@ -70,7 +86,7 @@ def load_data():
 
     @return df loaded data
     '''
-    df = pd.read_csv(INPUT_FILE)
+    df = pd.read_csv(BTM_SCORES_DATA_IN)
 
     # change index to id
     df = df.rename({'Unnamed: 0': 'id'}, axis=1) # rename column
@@ -126,6 +142,8 @@ def plot_topic_distribution(df):
 
     @param df
     '''
+    filename = BTM_DATA_OUT_PREFIX + "topic_distribution_maxtopic.jpeg"
+
     # count the number of tweets per topic using Counter
     topic2occurrences = Counter(df['maxtopic'])
     ys = []
@@ -137,7 +155,7 @@ def plot_topic_distribution(df):
     plt.pie(ys, labels=labels)
     plt.title('Ratio of tweets per topic')
     # save graph
-    plt.savefig(TOPIC_DISTRIBUTION_OUT)
+    plt.savefig(filename)
     plt.close()
 
 def export_topic_ids(df, max_topic):
@@ -147,11 +165,12 @@ def export_topic_ids(df, max_topic):
     @param df
     @param max_topic
     '''
+    filename = SENTIMENT_DATA_IN_PREFIX + "maxtopic-ids.csv"
     max_topic_df = df.loc[df['maxtopic'] == max_topic]
 
     # export selected columns to csv
     selected_columns = []
-    max_topic_df.to_csv(TOPIC_ID_OUT, columns = selected_columns)
+    max_topic_df.to_csv(filename, columns = selected_columns)
 
 
 # ******************************************************************************************
@@ -166,17 +185,20 @@ def sentiment_get_matching_topic_data(df):
     @param df
     @return largest_topic_sentiment_df
     '''
+    filename = SENTIMENT_DATA_IN_PREFIX + "cleaned_tweets_for_sentiment.csv"
     # load cleaned tweet corpus data
-    cleaned_sentiment_df = pd.read_csv(CLEANED_SENTIMENT_DATA)
+    cleaned_sentiment_df = pd.read_csv(filename)
     cleaned_sentiment_df = cleaned_sentiment_df.drop("Unnamed: 0", axis=1)
 
     # load topic ids
-    max_topic_ids = pd.read_csv(TOPIC_ID_OUT)
+    filename = SENTIMENT_DATA_IN_PREFIX + "maxtopic-ids.csv"
+    max_topic_ids = pd.read_csv(filename)
 
     # subset sentiment data with topic ids
     largest_topic_sentiment_df = max_topic_ids.merge(cleaned_sentiment_df, on='id', how='left')
 
     # export largest topic sentiment to csv
-    largest_topic_sentiment_df.to_csv(LARGEST_TOPIC_DATA_OUT)
+    filename = BTM_DATA_IN_PREFIX + "cleaned_tweets_largest_topic.csv"
+    largest_topic_sentiment_df.to_csv(filename)
 
     return largest_topic_sentiment_df

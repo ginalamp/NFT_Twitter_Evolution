@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
     # topic modelling & sentiment per segment
     one_topic_flow.run()
+    elbow_method.run() # TODO: doesn't currently output anything
 
     # sentiment analysis (segments)
     sentiment_segments.run()

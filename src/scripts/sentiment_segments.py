@@ -7,9 +7,9 @@ import matplotlib.dates as mdates # plot sentiment over time
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-NUM_SEGMENTS = 40 # TODO: update based on decisions.
+NUM_SEGMENTS = 34 # decided on 34 segments for overall data
 
-# Input/output files
+# Input/output files for overall data
 DATA_IN = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
 ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_overall_sentiment.jpeg"
 SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = '../dataout/sentiment/sentiment_per_segment.jpeg'
@@ -50,7 +50,7 @@ def clean_sentiment_data(df):
     return df
 
 
-def sentiment_polarity_score(df):
+def sentiment_polarity_score(df, filename=ROUNDED_POLARITY_OUT):
     analyzer = SentimentIntensityAnalyzer()
 
     # add polarity scores to df
@@ -68,7 +68,7 @@ def sentiment_polarity_score(df):
 
     # get amount of rounded negative, neutral, and positive polarity
     num_rounded_sentiments = df.groupby('rounded_polarity').count()
-    plot_rounded_polarity(num_rounded_sentiments)
+    plot_rounded_polarity(num_rounded_sentiments, filename)
 
     return df
 
@@ -84,7 +84,7 @@ def calc_polarity(x, bound):
     else:
         return 0
 
-def plot_rounded_polarity(num_rounded_sentiments):
+def plot_rounded_polarity(num_rounded_sentiments, filename):
     '''
     Plot rounded polariry
     '''
@@ -93,15 +93,15 @@ def plot_rounded_polarity(num_rounded_sentiments):
     plt.title('Rounded Sentiment for Largest topic')
     plt.xlabel('Polarity')
     plt.ylabel('Count')
-    plt.savefig(ROUNDED_POLARITY_OUT)
+    plt.savefig(filename)
     plt.close()
 
 
-def split_data_segments(df):
+def split_data_segments(df, num_segments=NUM_SEGMENTS):
     # sort dataframe by date
     df = df.sort_values(by=['date', 'time'])
     # list of dfs
-    sub_dfs = list(split(df, NUM_SEGMENTS))
+    sub_dfs = list(split(df, num_segments))
     return df, sub_dfs
 
 
@@ -114,7 +114,7 @@ def split(a, n):
     return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
 
 
-def sentiment_per_segment(df, sub_dfs):
+def sentiment_per_segment(df, sub_dfs, filename=SENTIMENT_OVER_TIME_PER_SEGMENT_OUT):
     '''
     Get average sentiment & plot sentiment over time
     '''
@@ -135,13 +135,13 @@ def sentiment_per_segment(df, sub_dfs):
     ))
 
     # dates = df.groupby('date').count()
-    plot_sentiment_over_time(compound_df)
+    plot_sentiment_over_time(compound_df, filename)
 
     # average overall sentiment
     avg_sentiment = df['compound'].mean()
     return avg_sentiment
 
-def plot_sentiment_over_time(compound_df):
+def plot_sentiment_over_time(compound_df, filename):
     '''
     @param compound_df
     '''
@@ -159,5 +159,5 @@ def plot_sentiment_over_time(compound_df):
     plt.xlabel('Date')
     plt.ylabel('Vader Sentiment score')
     # save graph
-    plt.savefig(SENTIMENT_OVER_TIME_PER_SEGMENT_OUT)
+    plt.savefig(filename)
     plt.close()

@@ -7,7 +7,7 @@ import numpy as np
 from scipy.interpolate import interp1d # normalise curve
 
 # NB: Need to make sure that the input LogLik column does not have any commas in the number.
-DATA_IN = '../datain/topic_modelling/ElbowMethodData.csv'
+DATA_IN = '../datain/topic_modelling/ElbowMethodData.csv' # overall data LogLik values for largest community
 
 def run():
     # get data
