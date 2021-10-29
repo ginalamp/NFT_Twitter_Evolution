@@ -6,23 +6,44 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 # file paths
-# FREQUENCY_INPUT_FILE = "../datain/topic_modelling/cleaned_tweets_largest_community.csv"
-# FREQUENCY_OUTPUT_FILE = "../dataout/general/Total_tweet_frequency_largest_community.jpeg"
+OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
+OVERALL_DATA_OUT = "../dataout/general/overall_tweet_frequency.jpeg" # overall tweets
+
+LARGEST_TOPIC_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_topic.csv" # largest topic
+LARGEST_TOPIC_DATA_OUT = "../dataout/general/largest_topic_tweet_frequency.jpeg" # largest topic
 
 # file paths for sample data
-# FREQUENCY_INPUT_FILE = "../datain/topic_modelling/cleaned_tweets.csv"
-# FREQUENCY_OUTPUT_FILE = "../dataout/general/Total_tweet_frequency.jpeg"
-
-DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
-# DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_topic.csv" # largest topic
-
-DATA_OUT = "../dataout/general/overall_tweet_frequency.jpeg" # overall tweets
-# DATA_OUT = "../dataout/general/largest_topic_tweet_frequency.jpeg" # largest topic
+# SAMPLE_DATA_IN = "../datain/topic_modelling/cleaned_tweets.csv"
+# SAMPLE_DATA_OUT = "../dataout/general/Total_tweet_frequency.jpeg"
 
 def run():
+    print("hi")
+
+def run(topic, overall=False):
+    '''
+    Run frequency code.
+    Default run overall topics.
+
+    @param topic - int (1 for largest topic, 2 for second largest, etc.)
+    @param overall - boolean (true if want to analyse overall data frequency, false if not)
+    '''
     print("Running tweet frequency")
+    if not overall:
+        print("Setting topic I/O files...")
+        if topic == 1:
+            data_in = LARGEST_TOPIC_DATA_IN
+            data_out = LARGEST_TOPIC_DATA_OUT
+        else:
+            # TODO: Allow for different topic input/output
+            print("TODO: Have not set non-largest topic input/output files yet")
+            return
+    else:
+        print("Setting overall I/O files...")
+        data_in = OVERALL_DATA_IN
+        data_out = OVERALL_DATA_OUT
+
     # load tweet corpus data
-    df = pd.read_csv(DATA_IN)
+    df = pd.read_csv(data_in)
     df = df.drop("Unnamed: 0", axis=1)
 
     # remove any null created_at values from dataframe
@@ -38,13 +59,14 @@ def run():
 
     # group tweets by date and count number of entries per day
     dates = df.groupby('date').count()
-    plot_frequency_time(dates)
+    plot_frequency_time(dates, data_out)
     print("Finished running tweet frequency")
 
 
-def plot_frequency_time(dates):
+def plot_frequency_time(dates, data_out):
     '''
-    Plot tweet frequency over time
+    Plot tweet frequency over time.
+
     @param dates - df with count of number of tweets posted grouped by date
     '''
     fig, ax = plt.subplots()
@@ -56,7 +78,7 @@ def plot_frequency_time(dates):
     plt.title('Largest Community Tweet Frequency over time: 1 Feb - 31 May')
     plt.xlabel('Date')
     plt.ylabel('Number of Tweets')
-    plt.savefig(DATA_OUT)
+    plt.savefig(data_out)
     plt.close()
 
 if __name__ == "__main__":
