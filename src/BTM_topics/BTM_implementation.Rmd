@@ -101,6 +101,32 @@ scores
 plot(model)
 ```
 
+```{r save as vector/pdf}
+# Step 1: Call the pdf command to start the plot
+pdf(file = "/Users/ginalamp/Desktop/model_11_w9_h7.pdf",   # The directory you want to save the file in
+    width = 9, # The width of the plot in inches
+    height = 7) # The height of the plot in inches
+
+# Step 2: Create the plot with R code
+plot(model)
+
+# Step 3: Run dev.off() to create the file!
+dev.off()
+```
+```{r save as pdf with labels}
+# Step 1: Call the pdf command to start the plot
+pdf(file = "/Users/ginalamp/Desktop/model_11_w14_h9_labels_blanktitle.pdf",   # The directory you want to save the file in
+    width = 14, # The width of the plot in inches
+    height = 9) # The height of the plot in inches
+
+# Step 2: Create the plot with R code
+plot(model, labels = 1:model$K, title="")
+
+# Step 3: Run dev.off() to create the file!
+dev.off()
+```
+
+
 ```{r}
 # https://rdrr.io/cran/textplot/man/plot.BTM.html
 
