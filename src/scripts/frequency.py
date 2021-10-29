@@ -5,6 +5,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+OVERALL_ANALYSIS = False
+
 # file paths
 OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
 OVERALL_DATA_OUT = "../dataout/general/overall_tweet_frequency.jpeg" # overall tweets
@@ -19,18 +21,18 @@ LARGEST_TOPIC_DATA_OUT = "../dataout/general/largest_topic_tweet_frequency.jpeg"
 def run():
     print("hi")
 
-def run(topic, overall=False):
+def run(topic_position=1, overall=False):
     '''
     Run frequency code.
-    Default run overall topics.
+    Default run for largest topic.
 
-    @param topic - int (1 for largest topic, 2 for second largest, etc.)
+    @param topic_position - int (1 for largest topic, 2 for second largest, etc.)
     @param overall - boolean (true if want to analyse overall data frequency, false if not)
     '''
     print("Running tweet frequency")
     if not overall:
         print("Setting topic I/O files...")
-        if topic == 1:
+        if topic_position == 1:
             data_in = LARGEST_TOPIC_DATA_IN
             data_out = LARGEST_TOPIC_DATA_OUT
         else:
@@ -41,6 +43,7 @@ def run(topic, overall=False):
         print("Setting overall I/O files...")
         data_in = OVERALL_DATA_IN
         data_out = OVERALL_DATA_OUT
+        OVERALL_ANALYSIS = True
 
     # load tweet corpus data
     df = pd.read_csv(data_in)
@@ -75,7 +78,11 @@ def plot_frequency_time(dates, data_out):
     fmt_half_year = mdates.MonthLocator(interval=1)
     ax.xaxis.set_major_locator(fmt_half_year)
     # plot
-    plt.title('Largest Community Tweet Frequency over time: 1 Feb - 31 May')
+    if OVERALL_ANALYSIS:
+        plt.title('Overall Tweet Frequency over time: 1 Feb - 31 May')
+    else:
+        # TODO: edit this such that it can be any topic
+        plt.title('Largest Topic Tweet Frequency over time: 1 Feb - 31 May')
     plt.xlabel('Date')
     plt.ylabel('Number of Tweets')
     plt.savefig(data_out)
