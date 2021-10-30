@@ -9,7 +9,7 @@ import matplotlib.dates as mdates
 OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
 OVERALL_DATA_OUT = "../dataout/general/tweet_frequency_overall.jpeg" # overall tweets
 
-LARGEST_TOPIC_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_topic.csv" # largest topic
+LARGEST_TOPIC_DATA_IN = "../datain/topic_modelling/tweet_sentiment_subdf_topic_11.csv" # largest topic
 LARGEST_TOPIC_DATA_OUT = "../dataout/general/tweet_frequency_topic_11.jpeg" # largest topic
 
 # file paths for sample data
@@ -26,7 +26,7 @@ def run(topic_position=0, overall=False):
             overall: boolean (true if want to analyse overall data frequency, false if not)
     '''
     if not overall:
-        print("Running selected topic tweet frequency")
+        print("Calculating selected topic tweet frequency...")
         print("\tSetting topic I/O files...")
         if topic_position == 0:
             data_in = LARGEST_TOPIC_DATA_IN
@@ -36,7 +36,7 @@ def run(topic_position=0, overall=False):
             print("TODO: Have not set non-largest topic input/output files yet")
             return
     else:
-        print("Running overall tweet frequency")
+        print("Calculating overall tweet frequency...")
         print("\tSetting overall I/O files...")
         data_in = OVERALL_DATA_IN
         data_out = OVERALL_DATA_OUT
