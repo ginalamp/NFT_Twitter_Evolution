@@ -33,14 +33,14 @@ def run():
     df = load_data()
 
     # clean data text line by line and create column with cleaned tweets
-    print("Cleaning tweets)")
+    print("\tCleaning tweets")
     df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet)
 
     # output id, cleaned_tweets, and createdAt to csv
     selected_columns = ["created_at", "id", "cleaned_tweet"]
     df.to_csv(DATA_OUT, columns = selected_columns)
 
-    print("Finished cleaning corpus...")
+    print("\tFinished cleaning corpus...")
 
 def load_data():
     '''
@@ -52,11 +52,11 @@ def load_data():
     '''
     #import the data
     file_path = DATA_IN
-    print("Loading json data")
+    print("\tLoading json data")
     data = pd.read_json(file_path, lines=True)
 
     # clean data: remove retweets and select only english tweets
-    print("Removing reweets and non-english tweets")
+    print("\tRemoving reweets and non-english tweets")
     data = data[~data["text"].progress_apply(lambda x: x.startswith("RT"))]
     data = data[data["lang"].progress_apply(lambda x: x == "en")]
     data = data.rename(columns={'text': 'corpus'})

@@ -14,7 +14,7 @@ NUM_TWEETS_PER_SEGMENT = 0
 
 # Input/output files for overall data
 DATA_IN = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
-ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_overall_sentiment.jpeg"
+ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_sentiment_overall.jpeg"
 SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = '../dataout/sentiment/sentiment_per_segment.jpeg'
 
 def run():
@@ -33,7 +33,7 @@ def run():
     df, sub_dfs = split_data_segments(df)
     NUM_TWEETS_PER_SEGMENT = round(len(sub_dfs[0]) / 1000, 1)
     avg_sentiment = sentiment_per_segment(df, sub_dfs)
-    print("Average sentiment for overall is:", avg_sentiment)
+    print("\tAverage sentiment for overall is:", avg_sentiment)
 
 
 def clean_sentiment_data(df):

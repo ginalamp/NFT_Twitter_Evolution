@@ -16,6 +16,7 @@ def run():
         Run functions for elbow method for overall data.
         Uses BTM R function LogLik output (added manually to a csv).
     '''
+    print("Running elbow method")
     # get data
     df = pd.read_csv(DATA_IN)
 
@@ -29,10 +30,10 @@ def run():
 
     # apply kneelocator method
     kl = plot_knee_not_normalised(x, y)
-    print("Optimal amount of topics (not normalised):", kl.elbow)
+    print("\tOptimal amount of topics (not normalised):", kl.elbow)
 
     kl = plot_knee_normalised(x, y)
-    print("Optimal amount of topics (normalised):", kl.elbow)
+    print("\tOptimal amount of topics (normalised):", kl.elbow)
 
 def plot_knee_not_normalised(x, y):
     '''

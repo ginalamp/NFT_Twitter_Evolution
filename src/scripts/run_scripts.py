@@ -23,9 +23,12 @@ def create_output_directories():
 if __name__ == "__main__":
     create_output_directories()
 
-    # topic modelling & sentiment cleaning
-    clean_corpus_for_btm.run()
-    clean_corpus_for_sentiment.run()
+    # topic modelling & sentiment cleaning (only clean if haven't cleaned before)
+    if not os.path.exists('../datain/clean'):
+        clean_corpus_for_btm.run()
+        clean_corpus_for_sentiment.run()
+    else:
+        print("Skipping cleaning (already cleaned a previous time)")
 
     # tweet frequency
     frequency.run(overall=True)
@@ -37,6 +40,3 @@ if __name__ == "__main__":
 
     # sentiment analysis (segments)
     sentiment_segments.run()
-
-    # old.topic_modelling.run() # old
-    # sentiment_analysis.run() # old

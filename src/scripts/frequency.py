@@ -29,7 +29,7 @@ def run(topic_position=0, overall=False):
     '''
     print("Running tweet frequency")
     if not overall:
-        print("Setting topic I/O files...")
+        print("\tSetting topic I/O files...")
         if topic_position == 0:
             data_in = LARGEST_TOPIC_DATA_IN
             data_out = LARGEST_TOPIC_DATA_OUT
@@ -38,7 +38,7 @@ def run(topic_position=0, overall=False):
             print("TODO: Have not set non-largest topic input/output files yet")
             return
     else:
-        print("Setting overall I/O files...")
+        print("\tSetting overall I/O files...")
         data_in = OVERALL_DATA_IN
         data_out = OVERALL_DATA_OUT
         OVERALL_ANALYSIS = True
@@ -61,7 +61,7 @@ def run(topic_position=0, overall=False):
     # group tweets by date and count number of entries per day
     dates = df.groupby('date').count()
     plot_frequency_time(dates, data_out)
-    print("Finished running tweet frequency")
+    print("\tFinished running tweet frequency")
 
 
 def plot_frequency_time(dates, data_out):

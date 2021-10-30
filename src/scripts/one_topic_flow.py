@@ -31,11 +31,11 @@ def run(topic_position=0):
             topic_position: integer (0 for largest topic, 1 for second largest, etc.)
     '''
     print("Selected topic flow...")
-    print("Topic position:", topic_position)
+    print("\tTopic position:", topic_position)
     df, selected_topic = topic_modelling(topic_position)
     avg_sentiment = sentiment_analysis(df, selected_topic)
 
-    print("Average sentiment for this topic is:", avg_sentiment)
+    print("\tAverage sentiment for this topic is:", avg_sentiment)
 
 def topic_modelling(topic_position):
     '''
@@ -47,8 +47,8 @@ def topic_modelling(topic_position):
     df = load_data()
     df = match_topic_with_tweet(df)
     selected_topic = get_selected_topic(df, topic_position)
-    print("The selected topic is:", selected_topic)
-    plot_topic_distribution(df, selected_topic)
+    print("\tThe selected topic is:", selected_topic)
+    plot_topic_distribution(df)
     export_topic_ids(df, selected_topic)
 
     return df, selected_topic
@@ -64,7 +64,7 @@ def sentiment_analysis(df, selected_topic):
     # sentiment analysis
     df = sentiment_get_matching_topic_data(df, selected_topic)
     df = sentiment_segments.clean_sentiment_data(df)
-    filename = SENTIMENT_DATA_OUT_PREFIX + f"rounded_topic_{selected_topic}_sentiment.jpeg"
+    filename = SENTIMENT_DATA_OUT_PREFIX + f"rounded_sentiment_topic_{selected_topic}.jpeg"
     df = sentiment_segments.sentiment_polarity_score(df, filename)
     # segments
     df, sub_dfs = sentiment_segments.split_data_segments(df, NUM_SEGMENTS)
@@ -141,15 +141,14 @@ def get_selected_topic(df, topic_position):
     selected_topic = topic_counts.index[topic_position]
     return selected_topic
 
-def plot_topic_distribution(df, selected_topic):
+def plot_topic_distribution(df):
     '''
         Count the number of occurences of each topic and plot
 
         Args:
             df:
-            selected_topic: topic number
     '''
-    filename = BTM_DATA_OUT_PREFIX + f"topic_distribution_topic_{selected_topic}.jpeg"
+    filename = BTM_DATA_OUT_PREFIX + f"topic_distribution_overall.jpeg"
 
     # count the number of tweets per topic using Counter
     topic2occurrences = Counter(df['maxtopic'])
