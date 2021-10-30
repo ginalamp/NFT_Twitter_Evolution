@@ -10,7 +10,6 @@ import matplotlib.dates as mdates # plot sentiment over time
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 NUM_SEGMENTS = 34 # decided on 34 segments for overall data
-NUM_TWEETS_PER_SEGMENT = 0
 
 # Input/output files for overall data
 DATA_IN = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
@@ -31,9 +30,9 @@ def run():
     df = sentiment_polarity_score(df)
     # segments
     df, sub_dfs = split_data_segments(df)
-    NUM_TWEETS_PER_SEGMENT = round(len(sub_dfs[0]) / 1000, 1)
-    avg_sentiment = sentiment_per_segment(df, sub_dfs)
-    print("\tAverage sentiment for overall is:", avg_sentiment)
+    num_tweets_per_segment = round(len(sub_dfs[0]) / 1000, 1)
+    avg_sentiment = sentiment_per_segment(df, sub_dfs, num_tweets_per_segment)
+    print("\tAverage sentiment overall is:", avg_sentiment)
 
 
 def clean_sentiment_data(df):
@@ -162,14 +161,14 @@ def split(a, n):
     return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
 
 
-def sentiment_per_segment(df, sub_dfs, num_tweets_per_segment=NUM_TWEETS_PER_SEGMENT, filename=SENTIMENT_OVER_TIME_PER_SEGMENT_OUT):
+def sentiment_per_segment(df, sub_dfs, num_tweets_per_segment, filename=SENTIMENT_OVER_TIME_PER_SEGMENT_OUT):
     '''
         Get average sentiment & plot sentiment over time.
 
         Args:
             df:
             sub_dfs:
-            num_tweets_per_segment:
+            num_tweets_per_segment: number of tweets per segment.
             filename:
         Returns:
             avg_sentiment: the average sentiment over the entire timeperiod for the data.

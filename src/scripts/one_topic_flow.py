@@ -13,7 +13,7 @@ from collections import Counter # count number of tweets
 
 import sentiment_segments # sentiment analysis functions
 
-NUM_SEGMENTS = 40 # decided on 40 segments for largest topic
+NUM_SEGMENTS = 40 # decided on 40 segments for largest topic from ../BTM_topics/dataout/11_model_scores.csv
 
 # Input/output files
 BTM_SCORES_DATA_IN = "../BTM_topics/dataout/"
@@ -32,16 +32,16 @@ def run(topic_position=0, optimal_num_topics=11):
             optimal_num_topics: optimal number of topics identified by the ElbowMethod (using the R BTM LogLik values)
                 - default is 11 topics, since it is the most optimal from the data this was run.
     '''
-    print("Selected topic flow...")
-    print("\tTopic position:", topic_position)
+    print("Running selected topic flow")
+    print(f"\tTopic position: {topic_position}")
     df, selected_topic = topic_modelling(topic_position, optimal_num_topics)
     avg_sentiment = sentiment_analysis(df, selected_topic)
 
-    print("\tAverage sentiment for this topic is:", avg_sentiment)
+    print(f"\tAverage sentiment for topic {selected_topic} is: {avg_sentiment}")
 
 def topic_modelling(topic_position, optimal_num_topics):
     '''
-        Run topicmodelling related functions.
+        Run topic modelling related functions.
 
         Args:
             topic_position: integer (0 for largest topic, 1 for second largest, etc.)
@@ -50,7 +50,7 @@ def topic_modelling(topic_position, optimal_num_topics):
     df = load_data(optimal_num_topics)
     df = match_topic_with_tweet(df)
     selected_topic = get_selected_topic(df, topic_position)
-    print("\tThe selected topic is:", selected_topic)
+    print(f"\tThe selected topic is: {selected_topic}")
     plot_topic_distribution(df)
     export_topic_ids(df, selected_topic)
 
@@ -154,7 +154,7 @@ def plot_topic_distribution(df):
         Args:
             df:
     '''
-    filename = BTM_DATA_OUT_PREFIX + f"topic_distribution_overall.jpeg"
+    filename = BTM_DATA_OUT_PREFIX + "topic_distribution_overall.jpeg"
 
     # count the number of tweets per topic using Counter
     topic2occurrences = Counter(df['maxtopic'])

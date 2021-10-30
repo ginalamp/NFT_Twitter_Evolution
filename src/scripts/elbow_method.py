@@ -17,7 +17,7 @@ def run():
         Uses BTM R function LogLik output (added manually to a csv).
 
         Returns:
-            optimal_num_topics: Optimal number of topics identified by the elbow method
+            optimal_num_topics.elbow: Optimal number of topics identified by the elbow method
     '''
     print("Running elbow method")
     # get data
@@ -33,10 +33,10 @@ def run():
 
     # apply kneelocator method
     optimal_num_topics = plot_knee_not_normalised(x, y)
-    print("\tOptimal amount of topics (not normalised):", optimal_num_topics.elbow)
+    print("\tOptimal amount of topics (not normalised):", optimal_num_topics)
 
     optimal_num_topics = plot_knee_normalised(x, y)
-    print("\tOptimal amount of topics (normalised):", optimal_num_topics.elbow)
+    print("\tOptimal amount of topics (normalised):", optimal_num_topics)
     return optimal_num_topics
 
 def plot_knee_not_normalised(x, y):
@@ -47,11 +47,11 @@ def plot_knee_not_normalised(x, y):
             x:
             y:
         Returns:
-            optimal_num_topics: Most optimal point.
+            optimal_num_topics.elbow: Most optimal point.
     '''
     optimal_num_topics = KneeLocator(x, y, curve="concave", direction="increasing")
     optimal_num_topics.plot_knee_normalized()
-    return optimal_num_topics
+    return optimal_num_topics.elbow
 
 def plot_knee_normalised(x, y):
     '''
@@ -61,11 +61,11 @@ def plot_knee_normalised(x, y):
             x:
             y:
         Returns:
-            optimal_num_topics: Most optimal point.
+            optimal_num_topics.elbow: Most optimal point.
     '''
     optimal_num_topics = KneeLocator(x, y, curve="concave", direction="increasing", interp_method="polynomial")
     optimal_num_topics.plot_knee_normalized()
-    return optimal_num_topics
+    return optimal_num_topics.elbow
 
 if __name__ == "__main__":
     run()

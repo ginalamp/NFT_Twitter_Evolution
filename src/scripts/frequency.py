@@ -5,8 +5,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
-OVERALL_ANALYSIS = False
-
 # file paths
 OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
 OVERALL_DATA_OUT = "../dataout/general/tweet_frequency_overall.jpeg" # overall tweets
@@ -27,8 +25,8 @@ def run(topic_position=0, overall=False):
             topic_position: int (0 for largest topic, 1 for second largest, etc.)
             overall: boolean (true if want to analyse overall data frequency, false if not)
     '''
-    print("Running tweet frequency")
     if not overall:
+        print("Running selected topic tweet frequency")
         print("\tSetting topic I/O files...")
         if topic_position == 0:
             data_in = LARGEST_TOPIC_DATA_IN
@@ -38,10 +36,11 @@ def run(topic_position=0, overall=False):
             print("TODO: Have not set non-largest topic input/output files yet")
             return
     else:
+        print("Running overall tweet frequency")
         print("\tSetting overall I/O files...")
         data_in = OVERALL_DATA_IN
         data_out = OVERALL_DATA_OUT
-        OVERALL_ANALYSIS = True
+        overall = True
 
     # load tweet corpus data
     df = pd.read_csv(data_in)
@@ -60,16 +59,17 @@ def run(topic_position=0, overall=False):
 
     # group tweets by date and count number of entries per day
     dates = df.groupby('date').count()
-    plot_frequency_time(dates, data_out)
+    plot_frequency_time(dates, overall, data_out)
     print("\tFinished running tweet frequency")
 
 
-def plot_frequency_time(dates, data_out):
+def plot_frequency_time(dates, overall, data_out):
     '''
         Plot tweet frequency over time.
 
         Args:
             dates: df with count of number of tweets posted grouped by date
+            overall: True if is for an overall analysis, False if it is for a topic's analysis.
             data_out: file to which the plot output should be written to.
     '''
     fig, ax = plt.subplots()
@@ -78,7 +78,7 @@ def plot_frequency_time(dates, data_out):
     fmt_half_year = mdates.MonthLocator(interval=1)
     ax.xaxis.set_major_locator(fmt_half_year)
     # plot
-    if OVERALL_ANALYSIS:
+    if overall:
         plt.title('Overall Tweet Frequency over time: 1 Feb - 31 May')
     else:
         # TODO: edit this such that it can be any topic
