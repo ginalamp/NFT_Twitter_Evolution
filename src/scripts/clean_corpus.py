@@ -43,13 +43,11 @@ SENTIMENT_DATA_OUT = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
 
 def run():
     '''
-        Main running code that executes all cleaning corpus functions in the
-        correct order for the pipeline.
+        Clean corpus for sentiment and topic modelling code.
     '''
     print("Cleaning corpus...")
     df = load_data()
 
-    # clean data text line by line and create column with cleaned tweets
     # cleaning for sentiment analysis (keep stop words)
     print("\tCleaning tweets for sentiment analysis")
     remove_stop = False
