@@ -1,6 +1,7 @@
 '''
     Run all cleaning, frequency, topic modelling, and sentiment analysis scripts.
-    TODO: Does not run elbow method, since it causes the plots to include the elbow method plot in output.
+    
+    NOTE: Does not run elbow method, since it causes the plots to include the elbow method plot in output.
 '''
 import frequency, clean_corpus # general
 import single_topic_analysis, elbow_method # topic modelling
@@ -33,11 +34,12 @@ if __name__ == "__main__":
 
     # topic modelling & sentiment per segment
     # elbow_method.run() # TODO: this messes with topic analysis graph output
-    single_topic_analysis.run()
+    selected_topic = single_topic_analysis.run()
 
     # sentiment analysis (segments)
     sentiment_segments.run()
 
     # tweet frequency
     frequency.run(overall=True)
-    frequency.run(topic_position=topic_position)
+    print(f"Running frequency for selected topid {selected_topic}")
+    frequency.run(selected_topic=selected_topic)

@@ -9,32 +9,27 @@ import matplotlib.dates as mdates
 OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
 OVERALL_DATA_OUT = "../dataout/general/tweet_frequency_overall.jpeg" # overall tweets
 
-LARGEST_TOPIC_DATA_IN = "../datain/topic_modelling/tweet_sentiment_subdf_topic_11.csv" # largest topic
-LARGEST_TOPIC_DATA_OUT = "../dataout/general/tweet_frequency_topic_11.jpeg" # largest topic
+TOPIC_DATA_IN_PREFIX = "../datain/topic_modelling/" # topic
+TOPIC_DATA_OUT_PREFIX = "../dataout/general/" # topic
 
 # file paths for sample data
 # SAMPLE_DATA_IN = "../datain/topic_modelling/cleaned_tweets.csv"
 # SAMPLE_DATA_OUT = "../dataout/general/Total_tweet_frequency.jpeg"
 
-def run(topic_position=0, overall=False):
+def run(overall=False, selected_topic=11):
     '''
         Run frequency code.
         Default run for largest topic.
 
         Args:
-            topic_position: int (0 for largest topic, 1 for second largest, etc.)
             overall: boolean (true if want to analyse overall data frequency, false if not)
+            selected_topic: the selected topic number
     '''
     if not overall:
         print("Calculating selected topic tweet frequency...")
         print("\tSetting topic I/O files...")
-        if topic_position == 0:
-            data_in = LARGEST_TOPIC_DATA_IN
-            data_out = LARGEST_TOPIC_DATA_OUT
-        else:
-            # TODO: Allow for different topic input/output
-            print("TODO: Have not set non-largest topic input/output files yet")
-            return
+        data_in = TOPIC_DATA_IN_PREFIX + f"tweet_sentiment_subdf_topic_{selected_topic}.csv"
+        data_out = TOPIC_DATA_OUT_PREFIX + f"tweet_frequency_topic_{selected_topic}.jpeg"
     else:
         print("Calculating overall tweet frequency...")
         print("\tSetting overall I/O files...")
@@ -59,17 +54,18 @@ def run(topic_position=0, overall=False):
 
     # group tweets by date and count number of entries per day
     dates = df.groupby('date').count()
-    plot_frequency_time(dates, overall, data_out)
+    plot_frequency_time(dates, overall, selected_topic, data_out)
     print("\tGraph outputs available in dataout/")
 
 
-def plot_frequency_time(dates, overall, data_out):
+def plot_frequency_time(dates, overall, selected_topic, data_out):
     '''
         Plot tweet frequency over time.
 
         Args:
             dates: df with count of number of tweets posted grouped by date
             overall: True if is for an overall analysis, False if it is for a topic's analysis.
+            selected_topic: the selected topic number
             data_out: path to the file to which this function will output to.
     '''
     fig, ax = plt.subplots()
@@ -81,8 +77,7 @@ def plot_frequency_time(dates, overall, data_out):
     if overall:
         plt.title('Overall Tweet Frequency over time: 1 Feb - 31 May')
     else:
-        # TODO: edit this such that it can be any topic
-        plt.title('Largest Topic Tweet Frequency over time: 1 Feb - 31 May')
+        plt.title(f'Topic {selected_topic} Tweet Frequency over time: 1 Feb - 31 May')
     plt.xlabel('Date')
     plt.ylabel('Number of Tweets')
     plt.savefig(data_out)

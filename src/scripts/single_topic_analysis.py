@@ -26,6 +26,8 @@ def run(topic_position=0, optimal_num_topics=11):
             topic_position: integer (0 for largest topic, 1 for second largest, etc.)
             optimal_num_topics: optimal number of topics identified by the ElbowMethod (using the R BTM LogLik values)
                 - default is 11 topics, since it is the most optimal from the data this was run.
+        Returns:
+            selected_topic: the selected topic number
     '''
     print(f"Applying topic modelling & sentiment analysis on a single topic...")
     print(f"\tTopic position: {topic_position}")
@@ -33,6 +35,8 @@ def run(topic_position=0, optimal_num_topics=11):
     avg_sentiment = sentiment_analysis(df, selected_topic)
 
     print(f"\tAverage sentiment for topic {selected_topic} is: {avg_sentiment}")
+
+    return selected_topic
 
 def topic_modelling(topic_position, optimal_num_topics):
     '''
