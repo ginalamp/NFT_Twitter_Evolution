@@ -7,8 +7,7 @@ import sentiment_segments # sentiment analysis
 
 import os # creating directories
 
-overall = True
-topic = 0 # 0 is the largest topic, 1 second largest, etc.
+topic_position = 0 # 0 is the largest topic, 1 second largest, etc.
 
 def create_output_directories():
     '''
@@ -29,8 +28,8 @@ if __name__ == "__main__":
     clean_corpus_for_sentiment.run()
 
     # tweet frequency
-    frequency.run(topic, overall)
-    frequency.run(topic, not overall)
+    frequency.run(overall=True)
+    frequency.run(topic_position=topic_position)
 
     # topic modelling & sentiment per segment
     one_topic_flow.run()

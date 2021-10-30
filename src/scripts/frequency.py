@@ -18,7 +18,7 @@ LARGEST_TOPIC_DATA_OUT = "../dataout/general/largest_topic_tweet_frequency.jpeg"
 # SAMPLE_DATA_IN = "../datain/topic_modelling/cleaned_tweets.csv"
 # SAMPLE_DATA_OUT = "../dataout/general/Total_tweet_frequency.jpeg"
 
-def run(topic_position=1, overall=False):
+def run(topic_position=0, overall=False):
     '''
         Run frequency code.
         Default run for largest topic.
