@@ -111,11 +111,14 @@ def clean_tweet(tweet, remove_stop):
     tweet = re.sub("(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)", "", tweet, flags=re.MULTILINE) # remove links
     tweet = re.sub("0x([\da-z\.-]+)", "", tweet, flags=re.MULTILINE) # remove addresses/pointers
     tweet = re.sub('\&\w+', "", tweet) # remove html entities (example &amp)
-    tweet = re.sub('[^a-zA-Z# ]+', ' ', tweet) # make sure tweet is only letters
 
     if remove_stop:
+        # sentiment analysis cleaning
+        tweet = re.sub('[^a-zA-Z#,.?!\-\'();: ]+', ' ', tweet) # make sure tweet is only letters and punctuation
         tweet = remove_stopwords(tweet)
     else:
+        # topic modelling cleaning
+        tweet = re.sub('[^a-zA-Z# ]+', ' ', tweet) # make sure tweet is only letters
         # convert cleaned tweet to list (each tweet being one element in the list)
         tweet = ' '.join([word for word in tweet.split()])
 
