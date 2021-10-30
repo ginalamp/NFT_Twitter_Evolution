@@ -5,7 +5,7 @@
     Input: need to make sure that tweets.zip is extracted, moved
     to datain/clean/ and renamed to largest_community_tweets.jsonl
 
-    Output: available in datain/topic_modelling/
+    Output: available in datain/sentiment/
 '''
 
 # TODO: merge this with clean_corpus_for_btm.py (only difference is not stopword removal)
@@ -22,7 +22,7 @@ DATA_OUT = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
 
 # file paths for sample data
 # TWEET_CORPUS_INPUT_FILE = "datain/clean/sample100k.jsonl"
-# CLEANED_TWEETS_OUTPUT_FILE = "datain/topic_modelling/cleaned_tweets.csv"
+# CLEANED_TWEETS_OUTPUT_FILE = "datain/sentiment_analysis/cleaned_tweets.csv"
 
 def run():
     '''

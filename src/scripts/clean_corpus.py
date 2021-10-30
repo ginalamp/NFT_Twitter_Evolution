@@ -1,11 +1,11 @@
 '''
-Outputs id, cleaned tweets with their createdAt timestamps
-into a csv. Also outputs file for BTM reading in format.
+    Outputs id, cleaned tweets with their createdAt timestamps
+    into a csv. Also outputs file for BTM reading in format.
 
-Input: need to make sure that tweets.zip is extracted, moved
-to datain/clean/ and renamed to largest_community_tweets.jsonl
+    Input: need to make sure that tweets.zip is extracted, moved
+    to datain/clean/ and renamed to largest_community_tweets.jsonl
 
-Output: available in datain/topic_modelling/
+    Output: available in datain/topic_modelling/
 '''
 
 import pandas as pd
@@ -20,8 +20,8 @@ from nltk.corpus import stopwords
 from tqdm import tqdm
 tqdm.pandas()
 
-# stop words and stemming
-remove_stop = True # set this to False if do not want to remove stopwords
+TOPIC_MODELLING = 0
+SENTIMENT_ANALYSIS = 1
 
 # add stop words
 stop_words = stopwords.words('english')
@@ -31,13 +31,14 @@ stop_words.append('rt')
 stop_words.append('nft')
 
 # file paths
-TWEET_CORPUS_INPUT_FILE = "../datain/clean/largest_community_tweets.jsonl"
-CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets_largest_community.csv"
-BTM_CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv"
+TWEET_CORPUS_DATA_IN = "../datain/clean/largest_community_tweets.jsonl"
+BTM_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv"
+SENTIMENT_DATA_OUT = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
 
 # file paths for sample data
-# TWEET_CORPUS_INPUT_FILE = "../datain/clean/sample100k.jsonl"
-# CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets.csv"
+# TWEET_CORPUS_DATA_IN = "../datain/clean/sample100k.jsonl"
+# BTM_DATA_OUT = "../datain/topic_modelling/cleaned_tweets.csv"
+# SENTIMENT_DATA_OUT = "../datain/sentiment/cleaned_tweets.csv"
 
 
 def run():
@@ -45,19 +46,25 @@ def run():
         Main running code that executes all cleaning corpus functions in the
         correct order for the pipeline.
     '''
-    print("Cleaning corpus for topic modelling...")
+    print("Cleaning corpus...")
     df = load_data()
 
     # clean data text line by line and create column with cleaned tweets
-    print("Cleaning tweets")
-    df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet)
+    # cleaning for sentiment analysis (keep stop words)
+    print("\tCleaning tweets for sentiment analysis")
+    remove_stop = False
+    df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
+    selected_columns = ["created_at", "id", "cleaned_tweet"] # output created_at, id, and cleaned_tweets to csv
+    print("\twriting sentiment cleaned data to csv...")
+    df.to_csv(SENTIMENT_DATA_OUT, columns = selected_columns)
 
-    # output id, cleaned_tweets, and createdAt to csv
-    selected_columns = ["created_at", "id", "cleaned_tweet"]
-    df.to_csv(CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns)
-    # BTM output file format
-    selected_columns = ["id", "cleaned_tweet"]
-    df.to_csv(BTM_CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns, index=None)
+    # cleaning for topic modelling (remove stop words)
+    print("\tCleaning tweets for topic modelling")
+    remove_stop = True
+    df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
+    selected_columns = ["id", "cleaned_tweet"] # BTM algorithm R script file format
+    print("\twriting topic modelling cleaned data to csv...")
+    df.to_csv(BTM_DATA_OUT, columns = selected_columns, index=None)
 
     print("Finished cleaning corpus...")
 
@@ -70,12 +77,14 @@ def load_data():
             imported english, non-retweeted data
     '''
     #import the data
-    filename = TWEET_CORPUS_INPUT_FILE
-    print("Loading json data")
+    filename = TWEET_CORPUS_DATA_IN
+    print("\tLoading json data...")
+    print("\t\tThis can take a while (about ~10 minutes on current largest community data)")
+    print("\t\tGo make yourself a cup of hot thing ;)")
     data = pd.read_json(filename, lines=True)
 
     # clean data: remove retweets and select only english tweets
-    print("Removing reweets and non-english tweets")
+    print("\tRemoving reweets and non-english tweets...")
     data = data[~data["text"].progress_apply(lambda x: x.startswith("RT"))]
     data = data[data["lang"].progress_apply(lambda x: x == "en")]
     data = data.rename(columns={'text': 'corpus'})
@@ -84,13 +93,14 @@ def load_data():
     return data
 
 
-def clean_tweet(tweet):
+def clean_tweet(tweet, remove_stop):
     '''
         Cleans tweet from hashtags, mentions, special characters, html entities, numbers,
         links, and stop words. Converts text to lower case.
 
         Args:
             tweet: a single tweet (String)
+            remove_stop: True if stopwords should be removed and False if they should not be removed.
         Returns:
             tweet: cleaned tweet (String)
     '''
