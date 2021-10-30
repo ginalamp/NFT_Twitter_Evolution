@@ -1,5 +1,7 @@
 '''
     Get optimal number of topics based on BTM logLik value output (R BTM functions).
+    
+    NOTE: This is not included in the run_scropts.py, since it messes with the other plot outputs.
 '''
 
 import matplotlib.pyplot as plt
@@ -16,7 +18,7 @@ def run():
         Run functions for elbow method for overall data.
         Uses BTM R function LogLik output (added manually to a csv).
     '''
-    print("Running elbow method")
+    print("Applying elbow method...")
     # get data
     df = pd.read_csv(DATA_IN)
 
