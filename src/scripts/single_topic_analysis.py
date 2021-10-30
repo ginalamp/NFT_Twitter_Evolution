@@ -69,12 +69,13 @@ def sentiment_analysis(df, selected_topic):
     df = sentiment_get_matching_topic_data(selected_topic)
     df = sentiment_segments.clean_sentiment_data(df)
     filename = SENTIMENT_DATA_OUT_PREFIX + f"rounded_sentiment_topic_{selected_topic}.jpeg"
-    df = sentiment_segments.sentiment_polarity_score(df, filename)
+
+    df = sentiment_segments.sentiment_polarity_score(df, False, selected_topic, filename)
     # segments
     df, sub_dfs, num_segments = sentiment_segments.split_data_segments(df, NUM_SEGMENTS)
     num_tweets_per_segment = round(len(sub_dfs[0]) / 1000, 1)
     filename = SENTIMENT_DATA_OUT_PREFIX + f"sentiment_per_segment_topic_{selected_topic}.jpeg"
-    avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment, False, filename)
+    avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment, False, selected_topic, filename)
 
     return avg_sentiment
 
