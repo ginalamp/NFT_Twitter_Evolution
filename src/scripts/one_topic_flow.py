@@ -67,20 +67,14 @@ def sentiment_analysis(df, selected_topic):
     print("\tGetting topic sentiment...")
     # sentiment analysis
     df = sentiment_get_matching_topic_data(df, selected_topic)
-    print("a")
     df = sentiment_segments.clean_sentiment_data(df)
-    print("b")
     filename = SENTIMENT_DATA_OUT_PREFIX + f"rounded_sentiment_topic_{selected_topic}.jpeg"
     df = sentiment_segments.sentiment_polarity_score(df, filename)
     # segments
-    print("c")
     df, sub_dfs, num_segments = sentiment_segments.split_data_segments(df, NUM_SEGMENTS)
-    print("d")
     num_tweets_per_segment = round(len(sub_dfs[0]) / 1000, 1)
     filename = SENTIMENT_DATA_OUT_PREFIX + f"sentiment_per_segment_topic_{selected_topic}.jpeg"
-    print("e")
     avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment, False, filename)
-    print("f")
 
     return avg_sentiment
 

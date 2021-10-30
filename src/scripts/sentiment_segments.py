@@ -148,13 +148,10 @@ def split_data_segments(df, num_segments=NUM_SEGMENTS):
             sub_dfs:
             num_segments: number of equal segments that the data needs to be split into.
     '''
-    print("\tSplitting data into segments")
     # sort dataframe by date
     df = df.sort_values(by=['date', 'time'])
-    print(f"Before: {num_segments}")
     # list of dfs
     sub_dfs = list(split(df, num_segments))
-    print(f"After: {num_segments}")
     return df, sub_dfs, num_segments
 
 
