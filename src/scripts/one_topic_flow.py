@@ -48,7 +48,7 @@ def topic_modelling(topic_position):
     df = match_topic_with_tweet(df)
     selected_topic = get_selected_topic(df, topic_position)
     print("The selected topic is:", selected_topic)
-    plot_topic_distribution(df)
+    plot_topic_distribution(df, selected_topic)
     export_topic_ids(df, selected_topic)
 
     return df, selected_topic
@@ -141,14 +141,15 @@ def get_selected_topic(df, topic_position):
     selected_topic = topic_counts.index[topic_position]
     return selected_topic
 
-def plot_topic_distribution(df):
+def plot_topic_distribution(df, selected_topic):
     '''
         Count the number of occurences of each topic and plot
 
         Args:
             df:
+            selected_topic: topic number
     '''
-    filename = BTM_DATA_OUT_PREFIX + "topic_distribution_maxtopic.jpeg"
+    filename = BTM_DATA_OUT_PREFIX + f"topic_distribution_topic_{selected_topic}.jpeg"
 
     # count the number of tweets per topic using Counter
     topic2occurrences = Counter(df['maxtopic'])

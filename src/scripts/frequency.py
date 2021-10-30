@@ -9,10 +9,10 @@ OVERALL_ANALYSIS = False
 
 # file paths
 OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
-OVERALL_DATA_OUT = "../dataout/general/overall_tweet_frequency.jpeg" # overall tweets
+OVERALL_DATA_OUT = "../dataout/general/tweet_frequency_overall.jpeg" # overall tweets
 
 LARGEST_TOPIC_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_topic.csv" # largest topic
-LARGEST_TOPIC_DATA_OUT = "../dataout/general/largest_topic_tweet_frequency.jpeg" # largest topic
+LARGEST_TOPIC_DATA_OUT = "../dataout/general/tweet_frequency_topic_11.jpeg" # largest topic
 
 # file paths for sample data
 # SAMPLE_DATA_IN = "../datain/topic_modelling/cleaned_tweets.csv"
