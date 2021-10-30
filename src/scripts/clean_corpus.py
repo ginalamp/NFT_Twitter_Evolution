@@ -32,6 +32,7 @@ stop_words.append('nft')
 
 # file paths
 TWEET_CORPUS_DATA_IN = "../datain/clean/largest_community_tweets.jsonl"
+FREQUENCY_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_largest_community.csv"
 BTM_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv"
 SENTIMENT_DATA_OUT = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
 
@@ -52,16 +53,19 @@ def run():
     print("\tCleaning tweets for sentiment analysis")
     remove_stop = False
     df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
-    selected_columns = ["created_at", "id", "cleaned_tweet"] # output created_at, id, and cleaned_tweets to csv
+
     print("\twriting sentiment cleaned data to csv...")
+    selected_columns = ["created_at", "id", "cleaned_tweet"] # output created_at, id, and cleaned_tweets to csv
     df.to_csv(SENTIMENT_DATA_OUT, columns = selected_columns)
 
     # cleaning for topic modelling (remove stop words)
     print("\tCleaning tweets for topic modelling")
     remove_stop = True
     df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
-    selected_columns = ["id", "cleaned_tweet"] # BTM algorithm R script file format
+
     print("\twriting topic modelling cleaned data to csv...")
+    df.to_csv(FREQUENCY_DATA_OUT, columns = selected_columns) # frequency data needs dates
+    selected_columns = ["id", "cleaned_tweet"] # BTM algorithm R script file format
     df.to_csv(BTM_DATA_OUT, columns = selected_columns, index=None)
 
     print("Finished cleaning corpus...")

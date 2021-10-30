@@ -13,8 +13,8 @@ TOPIC_DATA_IN_PREFIX = "../datain/topic_modelling/" # topic
 TOPIC_DATA_OUT_PREFIX = "../dataout/general/" # topic
 
 # file paths for sample data
-# SAMPLE_DATA_IN = "../datain/topic_modelling/cleaned_tweets.csv"
-# SAMPLE_DATA_OUT = "../dataout/general/Total_tweet_frequency.jpeg"
+# OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets.csv"
+# OVERALL_DATA_OUT = "../dataout/general/Total_tweet_frequency.jpeg"
 
 def run(overall=False, selected_topic=11):
     '''
@@ -47,7 +47,6 @@ def run(overall=False, selected_topic=11):
     df = df[df['created_at'].str.contains("2021")]
 
     # split created_at into date and time columns
-    #https://intellipaat.com/community/13909/python-how-can-i-split-a-column-with-both-date-and-time-e-g-2019-07-02-00-12-32-utc-into-two-separate-columns
     df['created_at'] = pd.to_datetime(df['created_at'])
     df['date'] = df['created_at'].dt.date
     df['time'] = df['created_at'].dt.time
