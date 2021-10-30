@@ -35,8 +35,8 @@ if __name__ == "__main__":
     frequency.run(topic_position=topic_position)
 
     # topic modelling & sentiment per segment
-    one_topic_flow.run()
-    elbow_method.run() # TODO: doesn't currently output anything
+    optimal_num_topics = elbow_method.run() # TODO: doesn't currently output anything
+    one_topic_flow.run(optimal_num_topics=optimal_num_topics)
 
     # sentiment analysis (segments)
     sentiment_segments.run()

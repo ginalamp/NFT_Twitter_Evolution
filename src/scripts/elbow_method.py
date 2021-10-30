@@ -15,6 +15,9 @@ def run():
     '''
         Run functions for elbow method for overall data.
         Uses BTM R function LogLik output (added manually to a csv).
+
+        Returns:
+            optimal_num_topics: Optimal number of topics identified by the elbow method
     '''
     print("Running elbow method")
     # get data
@@ -29,11 +32,12 @@ def run():
     y = np.concatenate(loglikvals).ravel()
 
     # apply kneelocator method
-    kl = plot_knee_not_normalised(x, y)
-    print("\tOptimal amount of topics (not normalised):", kl.elbow)
+    optimal_num_topics = plot_knee_not_normalised(x, y)
+    print("\tOptimal amount of topics (not normalised):", optimal_num_topics.elbow)
 
-    kl = plot_knee_normalised(x, y)
-    print("\tOptimal amount of topics (normalised):", kl.elbow)
+    optimal_num_topics = plot_knee_normalised(x, y)
+    print("\tOptimal amount of topics (normalised):", optimal_num_topics.elbow)
+    return optimal_num_topics
 
 def plot_knee_not_normalised(x, y):
     '''
@@ -43,11 +47,11 @@ def plot_knee_not_normalised(x, y):
             x:
             y:
         Returns:
-            kl: Most optimal point.
+            optimal_num_topics: Most optimal point.
     '''
-    kl = KneeLocator(x, y, curve="concave", direction="increasing")
-    kl.plot_knee_normalized()
-    return kl
+    optimal_num_topics = KneeLocator(x, y, curve="concave", direction="increasing")
+    optimal_num_topics.plot_knee_normalized()
+    return optimal_num_topics
 
 def plot_knee_normalised(x, y):
     '''
@@ -57,11 +61,11 @@ def plot_knee_normalised(x, y):
             x:
             y:
         Returns:
-            kl: Most optimal point.
+            optimal_num_topics: Most optimal point.
     '''
-    kl = KneeLocator(x, y, curve="concave", direction="increasing", interp_method="polynomial")
-    kl.plot_knee_normalized()
-    return kl
+    optimal_num_topics = KneeLocator(x, y, curve="concave", direction="increasing", interp_method="polynomial")
+    optimal_num_topics.plot_knee_normalized()
+    return optimal_num_topics
 
 if __name__ == "__main__":
     run()

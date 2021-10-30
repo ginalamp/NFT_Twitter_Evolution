@@ -16,35 +16,38 @@ import sentiment_segments # sentiment analysis functions
 NUM_SEGMENTS = 40 # decided on 40 segments for largest topic
 
 # Input/output files
-BTM_SCORES_DATA_IN = "../BTM_topics/dataout/11_model_scores.csv" # 11 topics is the most optimal
+BTM_SCORES_DATA_IN = "../BTM_topics/dataout/"
 BTM_DATA_IN_PREFIX = "../datain/topic_modelling/"
 BTM_DATA_OUT_PREFIX = "../dataout/topic_modelling/"
 
 SENTIMENT_DATA_IN_PREFIX = "../datain/sentiment/"
 SENTIMENT_DATA_OUT_PREFIX = "../dataout/sentiment/"
 
-def run(topic_position=0):
+def run(topic_position=0, optimal_num_topics=11):
     '''
         Run functions.
 
         Args:
             topic_position: integer (0 for largest topic, 1 for second largest, etc.)
+            optimal_num_topics: optimal number of topics identified by the ElbowMethod (using the R BTM LogLik values)
+                - default is 11 topics, since it is the most optimal from the data this was run.
     '''
     print("Selected topic flow...")
     print("\tTopic position:", topic_position)
-    df, selected_topic = topic_modelling(topic_position)
+    df, selected_topic = topic_modelling(topic_position, optimal_num_topics)
     avg_sentiment = sentiment_analysis(df, selected_topic)
 
     print("\tAverage sentiment for this topic is:", avg_sentiment)
 
-def topic_modelling(topic_position):
+def topic_modelling(topic_position, optimal_num_topics):
     '''
         Run topicmodelling related functions.
 
         Args:
             topic_position: integer (0 for largest topic, 1 for second largest, etc.)
+            optimal_num_topics: optimal number of topics identified by the ElbowMethod (using the R BTM LogLik values)
     '''
-    df = load_data()
+    df = load_data(optimal_num_topics)
     df = match_topic_with_tweet(df)
     selected_topic = get_selected_topic(df, topic_position)
     print("\tThe selected topic is:", selected_topic)
@@ -79,14 +82,17 @@ def sentiment_analysis(df, selected_topic):
 # *** Topic modelling
 # ******************************************************************************************
 
-def load_data():
+def load_data(optimal_num_topics):
     '''
         Get data.
 
+        Args:
+            optimal_num_topics: optimal number of topics identified by the ElbowMethod (using the R BTM LogLik values)
         Returns
             df: loaded data
     '''
-    df = pd.read_csv(BTM_SCORES_DATA_IN)
+    filename = BTM_SCORES_DATA_IN + f"{optimal_num_topics}_model_scores.csv"
+    df = pd.read_csv(filename)
 
     # change index to id
     df = df.rename({'Unnamed: 0': 'id'}, axis=1) # rename column
