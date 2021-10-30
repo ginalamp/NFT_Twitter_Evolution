@@ -48,7 +48,7 @@ def plot_knee_not_normalised(x, y):
             optimal_num_topics.elbow: Most optimal point.
     '''
     optimal_num_topics = KneeLocator(x, y, curve="concave", direction="increasing")
-    optimal_num_topics.plot_knee_normalized()
+    optimal_num_topics.plot_knee()
     return optimal_num_topics
 
 def plot_knee_normalised(x, y):
