@@ -70,9 +70,9 @@ def load_data():
             imported english, non-retweeted data
     '''
     #import the data
-    file_path = TWEET_CORPUS_INPUT_FILE
+    filename = TWEET_CORPUS_INPUT_FILE
     print("Loading json data")
-    data = pd.read_json(file_path, lines=True)
+    data = pd.read_json(filename, lines=True)
 
     # clean data: remove retweets and select only english tweets
     print("Removing reweets and non-english tweets")

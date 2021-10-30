@@ -70,7 +70,7 @@ def plot_frequency_time(dates, overall, data_out):
         Args:
             dates: df with count of number of tweets posted grouped by date
             overall: True if is for an overall analysis, False if it is for a topic's analysis.
-            data_out: file to which the plot output should be written to.
+            data_out: path to the file to which this function will output to.
     '''
     fig, ax = plt.subplots()
     ax.plot(dates.index, 'cleaned_tweet', data=dates)

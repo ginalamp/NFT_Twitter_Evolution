@@ -40,8 +40,8 @@ def plot_knee_not_normalised(x, y):
         Apply non-normalised knee method.
 
         Args:
-            x:
-            y:
+            x: numpy 1D array with the number of topics.
+            y: numpy 1D array with the LogLik value associated with the number of topics.
         Returns:
             optimal_num_topics.elbow: Most optimal point.
     '''
@@ -54,8 +54,8 @@ def plot_knee_normalised(x, y):
         Apply default polynomial knee method normalisation.
 
         Args:
-            x:
-            y:
+            x: numpy 1D array with the number of topics.
+            y: numpy 1D array with the LogLik value associated with the number of topics.
         Returns:
             optimal_num_topics.elbow: Most optimal point.
     '''

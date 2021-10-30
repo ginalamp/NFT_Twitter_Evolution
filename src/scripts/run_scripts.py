@@ -1,5 +1,6 @@
 '''
-    Run all cleaning, topic modelling, and sentiment analysis scripts
+    Run all cleaning, topic modelling, and sentiment analysis scripts.
+    TODO: Does not run elbow method, since it causes the plots to include the elbow method plot in output.
 '''
 import frequency, clean_corpus_for_btm, clean_corpus_for_sentiment # general
 import one_topic_flow, elbow_method # topic modelling
@@ -28,7 +29,7 @@ if __name__ == "__main__":
         clean_corpus_for_btm.run()
         clean_corpus_for_sentiment.run()
     else:
-        print("Skipping cleaning (already cleaned a previous time)")
+        print("Skipping cleaning cleaning step (already cleaned data a previous time)")
 
     # tweet frequency
     frequency.run(overall=True)

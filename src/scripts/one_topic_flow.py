@@ -3,12 +3,7 @@
 '''
 
 import pandas as pd
-# import numpy as np
 import matplotlib.pyplot as plt
-# import matplotlib.dates as mdates # plot sentiment over time
-
-# from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer # vader sentiment analysis
-
 from collections import Counter # count number of tweets
 
 import sentiment_segments # sentiment analysis functions
@@ -46,6 +41,9 @@ def topic_modelling(topic_position, optimal_num_topics):
         Args:
             topic_position: integer (0 for largest topic, 1 for second largest, etc.)
             optimal_num_topics: optimal number of topics identified by the ElbowMethod (using the R BTM LogLik values)
+        Returns:
+            df: dataframe with topic numbers corresponding to their tweets.
+            selected_topic: the selected topic number
     '''
     df = load_data(optimal_num_topics)
     df = match_topic_with_tweet(df)
@@ -61,12 +59,14 @@ def sentiment_analysis(df, selected_topic):
         Run sentiment analysis related functions.
 
         Args:
-            df:
-            selected_topic:
+            df: dataframe with topic numbers corresponding to their tweets.
+            selected_topic: the topic number of the topic to be analysed.
+        Returns:
+            avg_sentiment: the average sentiment for the selected topic over the time period.
     '''
     print("\tGetting topic sentiment...")
     # sentiment analysis
-    df = sentiment_get_matching_topic_data(df, selected_topic)
+    df = sentiment_get_matching_topic_data(selected_topic)
     df = sentiment_segments.clean_sentiment_data(df)
     filename = SENTIMENT_DATA_OUT_PREFIX + f"rounded_sentiment_topic_{selected_topic}.jpeg"
     df = sentiment_segments.sentiment_polarity_score(df, filename)
@@ -89,7 +89,7 @@ def load_data(optimal_num_topics):
         Args:
             optimal_num_topics: optimal number of topics identified by the ElbowMethod (using the R BTM LogLik values)
         Returns
-            df: loaded data
+            df: loaded BTM scores dataframe
     '''
     filename = BTM_SCORES_DATA_IN + f"{optimal_num_topics}_model_scores.csv"
     df = pd.read_csv(filename)
@@ -112,7 +112,7 @@ def match_topic_with_tweet(df):
         probablity that they're in the topic.
 
         Args:
-            df: loaded df
+            df: loaded BTM scores dataframe
         Returns:
             df: df with a column indicating their most probable topic
     '''
@@ -132,10 +132,14 @@ def match_topic_with_tweet(df):
 
 def get_selected_topic(df, topic_position):
     '''
-        Topic with the most tweets having the highest probability of being in it.
+        Get the topic with the according to the topic_position that having the highest probability of being in that topic.
+            For example:
+                if topic_position is 0 it will get the topic with the most amount of tweets associated with it,
+                if topic_position is 1 it will get the topic with the second most amount of tweets associated with it,
+                etc.
 
         Args:
-            df:
+            df: df with a column indicating their most probable topic
             topic_position: integer (0 for largest topic, 1 for second largest, etc.)
         Returns:
             selected_topic: the selected topic number
@@ -149,10 +153,10 @@ def get_selected_topic(df, topic_position):
 
 def plot_topic_distribution(df):
     '''
-        Count the number of occurences of each topic and plot
+        Plot the distribution of tweets associated with each topic.
 
         Args:
-            df:
+            df: df with a column indicating their most probable topic 
     '''
     filename = BTM_DATA_OUT_PREFIX + "topic_distribution_overall.jpeg"
 
@@ -175,10 +179,10 @@ def export_topic_ids(df, selected_topic):
         Get topic tweet ids and export them to a csv file.
 
         Args:
-            df:
-            selected_topic: topic number
+            df: df with a column indicating their most probable topic
+            selected_topic: topic number who's IDs should be exported
     '''
-    filename = SENTIMENT_DATA_IN_PREFIX + "maxtopic-ids.csv"
+    filename = SENTIMENT_DATA_IN_PREFIX + f"ids_topic_{selected_topic}.csv"
     selected_topic_df = df.loc[df['maxtopic'] == selected_topic]
 
     # export selected columns to csv
@@ -190,16 +194,15 @@ def export_topic_ids(df, selected_topic):
 # *** Sentiment analysis
 # ******************************************************************************************
 
-def sentiment_get_matching_topic_data(df, selected_topic):
+def sentiment_get_matching_topic_data(selected_topic):
     '''
         Get the subset of the topic modelling data from the cleaned sentiment data 
         (use the topic IDs to get the sentiment data matching those ids).
 
         Args:
-            df:
-            selected_topic:
+            selected_topic: the topic number of the topic to be analysed.
         Returns:
-            selected_topic_sentiment_df
+            selected_topic_sentiment_df: subset of cleaned sentiment data that matches the selected topic's tweet ids.
     '''
     filename = SENTIMENT_DATA_IN_PREFIX + "cleaned_tweets_for_sentiment.csv"
     # load cleaned tweet corpus data
@@ -207,7 +210,7 @@ def sentiment_get_matching_topic_data(df, selected_topic):
     cleaned_sentiment_df = cleaned_sentiment_df.drop("Unnamed: 0", axis=1)
 
     # load topic ids
-    filename = SENTIMENT_DATA_IN_PREFIX + "maxtopic-ids.csv"
+    filename = SENTIMENT_DATA_IN_PREFIX + f"ids_topic_{selected_topic}.csv"
     selected_topic_ids = pd.read_csv(filename)
 
     # subset sentiment data with topic ids
