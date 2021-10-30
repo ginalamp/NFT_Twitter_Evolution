@@ -27,7 +27,7 @@ def run(topic_position=0, optimal_num_topics=11):
             optimal_num_topics: optimal number of topics identified by the ElbowMethod (using the R BTM LogLik values)
                 - default is 11 topics, since it is the most optimal from the data this was run.
     '''
-    print(f"Running normalised optimal topic flow")
+    print(f"Applying topic modelling & sentiment analysis on a single topic...")
     print(f"\tTopic position: {topic_position}")
     df, selected_topic = topic_modelling(topic_position, optimal_num_topics)
     avg_sentiment = sentiment_analysis(df, selected_topic)
@@ -217,7 +217,7 @@ def sentiment_get_matching_topic_data(selected_topic):
     selected_topic_sentiment_df = selected_topic_ids.merge(cleaned_sentiment_df, on='id', how='left')
 
     # export selected topic sentiment to csv
-    filename = BTM_DATA_IN_PREFIX + f"cleaned_tweets_topic_{selected_topic}.csv"
+    filename = BTM_DATA_IN_PREFIX + f"tweet_sentiment_subdf_topic_{selected_topic}.csv"
     selected_topic_sentiment_df.to_csv(filename)
 
     return selected_topic_sentiment_df
