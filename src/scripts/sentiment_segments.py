@@ -1,5 +1,7 @@
-# Outputs overall sentiment (with rounded polarity) and sentiment over time (frequency bins).
-# Also computes overall average sentiment.
+'''
+    Outputs overall sentiment (with rounded polarity) and sentiment over time (frequency bins).
+    Also computes overall average sentiment.
+'''
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,15 +9,22 @@ import matplotlib.dates as mdates # plot sentiment over time
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-NUM_SEGMENTS = 40 # TODO: update based on decisions.
+# progress bar
+from tqdm import tqdm
+tqdm.pandas()
 
-# Input/output files
+NUM_SEGMENTS = 34 # decided on 34 segments for overall data
+
+# Input/output files for overall data
 DATA_IN = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
-ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_overall_sentiment.jpeg"
-SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = '../dataout/sentiment/sentiment_per_segment.jpeg'
+ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_sentiment_overall.jpeg"
+SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = '../dataout/sentiment/sentiment_per_segment_overall.jpeg'
 
 def run():
-    print("running overall sentiment analysis segments...")
+    '''
+        Runs functions apply sentiment analysis on segments over time.
+    '''
+    print("Applying overall sentiment analysis on segments over time...")
     # load cleaned tweet corpus data
     df = pd.read_csv(DATA_IN)
     df = df.drop("Unnamed: 0", axis=1)
@@ -24,16 +33,20 @@ def run():
 
     df = sentiment_polarity_score(df)
     # segments
-    df, sub_dfs = split_data_segments(df)
-    avg_sentiment = sentiment_per_segment(df, sub_dfs)
-    print("Average sentiment for overall is:", avg_sentiment)
+    df, sub_dfs, num_segments = split_data_segments(df)
+    num_tweets_per_segment = round(len(sub_dfs[0]) / 1000, 1)
+    avg_sentiment = sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment)
+    print("\tAverage sentiment overall is:", avg_sentiment)
 
 
 def clean_sentiment_data(df):
     '''
-    Load & clean data
+        Load & clean data.
 
-    @return df cleaned df
+        Args:
+            df: dataframe containing the sentiment data
+        Returns:
+            df: cleaned dataframe
     '''
     # remove all null created_at values from dataframe
     df = df.drop(df[df['created_at'].isnull()].index)
@@ -50,16 +63,29 @@ def clean_sentiment_data(df):
     return df
 
 
-def sentiment_polarity_score(df):
+def sentiment_polarity_score(df, overall=True, selected_topic=0, filename=ROUNDED_POLARITY_OUT):
+    '''
+        Calculates the sentiment polarity score.
+
+        Args:
+            df: cleaned dataframe with tweet data
+            overall: boolean (true if want to analyse overall data frequency, false if not)
+            selected_topic: the topic number of the topic to be analysed.
+            filename: path to the file to which this function will output to.
+        Returns:
+            df: dataframe with Vader sentiment polarity score columns added.
+    '''
     analyzer = SentimentIntensityAnalyzer()
 
     # add polarity scores to df
     # https://github.com/sidneykung/twitter_hate_speech_detection/blob/master/preprocessing/VADER_sentiment.ipynb
+    print(f"\t\tGetting sentiment polarity scores...")
     pol = lambda x: analyzer.polarity_scores(x)
-    df['polarity'] = df["cleaned_tweet"].apply(pol)
+    df['polarity'] = df["cleaned_tweet"].progress_apply(pol)
 
     # split polarity scores into separate columns
-    df = pd.concat([df.drop(['polarity'], axis=1), df['polarity'].apply(pd.Series)], axis=1)
+    print(f"\t\tSplitting polarity scores into dataframe columns...")
+    df = pd.concat([df.drop(['polarity'], axis=1), df['polarity'].progress_apply(pd.Series)], axis=1)
 
     # get rounded polarity score
     round_pol = lambda x: calc_polarity(x, 0.05)
@@ -68,14 +94,20 @@ def sentiment_polarity_score(df):
 
     # get amount of rounded negative, neutral, and positive polarity
     num_rounded_sentiments = df.groupby('rounded_polarity').count()
-    plot_rounded_polarity(num_rounded_sentiments)
+    plot_rounded_polarity(num_rounded_sentiments, overall, selected_topic, filename)
 
     return df
 
 
 def calc_polarity(x, bound):
     '''
-    Round polarity up/down based on bound.
+        Round polarity up/down based on bound.
+
+        Args:
+            x: 
+            bound:
+        Returns:
+            int: -1 if x is less than -bound, 1 greater than bound, or 0
     '''
     if x < -bound:
         return -1
@@ -84,39 +116,78 @@ def calc_polarity(x, bound):
     else:
         return 0
 
-def plot_rounded_polarity(num_rounded_sentiments):
+def plot_rounded_polarity(num_rounded_sentiments, overall, selected_topic, filename):
     '''
-    Plot rounded polariry
+        Plot rounded polariry.
+        Called by sentiment_polarity_score().
+
+        Args:
+            num_rounded_sentiments: dataframe grouped by rounded polarity
+            overall: boolean (true if want to analyse overall data frequency, false if not)
+            selected_topic: the topic number of the topic to be analysed.
+            filename: path to the file to which this function will output to.
     '''
     # plot rounded negative, neutral, and positive sentiment amounts
     plt.bar(num_rounded_sentiments.index, num_rounded_sentiments["compound"])
-    plt.title('Rounded Sentiment for Largest topic')
+    if overall:
+        plt.title('Overall Rounded Sentiment')
+    else:
+        plt.title(f'Topic {selected_topic} Rounded Sentiment')
+
     plt.xlabel('Polarity')
     plt.ylabel('Count')
-    plt.savefig(ROUNDED_POLARITY_OUT)
+    plt.savefig(filename)
     plt.close()
 
 
-def split_data_segments(df):
+def split_data_segments(df, num_segments=NUM_SEGMENTS):
+    '''
+        Split data into segments according to date.
+
+        Args:
+            df: dataframe with Vader sentiment polarity score columns added.
+            num_segments: number of equal segments that the data needs to be split into.
+        Returns:
+            df: sorted df by date
+            sub_dfs: a list of subdataframes of df
+            num_segments: number of equal segments that the data needs to be split into.
+    '''
     # sort dataframe by date
     df = df.sort_values(by=['date', 'time'])
     # list of dfs
-    sub_dfs = list(split(df, NUM_SEGMENTS))
-    return df, sub_dfs
+    sub_dfs = list(split(df, num_segments))
+    return df, sub_dfs, num_segments
 
 
-def split(a, n):
+def split(df, n):
     '''
-    Split df (a) into n groups of equal length (returns list of sub dataframes)
-    https://stackoverflow.com/questions/2130016/splitting-a-list-into-n-parts-of-approximately-equal-length
+        Split df into n groups of equal length (returns list of sub dataframes).
+        https://stackoverflow.com/questions/2130016/splitting-a-list-into-n-parts-of-approximately-equal-length
+
+        Args:
+            df: dataframe that should be split
+            n: number of equal segments that the data needs to be split into.
+        Retuns:
+            sub dataframe according to df and n
     '''
-    k, m = divmod(len(a), n)
-    return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
+    k, m = divmod(len(df), n)
+    return (df[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
 
 
-def sentiment_per_segment(df, sub_dfs):
+def sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment, overall=True, selected_topic=0, filename=SENTIMENT_OVER_TIME_PER_SEGMENT_OUT):
     '''
-    Get average sentiment & plot sentiment over time
+        Get average sentiment & plot sentiment over time.
+
+        Args:
+            df: sorted df by date
+            sub_dfs: a list of subdataframes of df
+            num_segments: number of equal segments that the data needs to be split into.
+            num_tweets_per_segment: number of tweets per segment.
+            overall: boolean (true if want to analyse overall data frequency, false if not)
+            selected_topic: the topic number of the topic to be analysed.
+            filename: path to the file to which this function will output to.
+        Returns:
+            avg_sentiment: the average sentiment over the entire timeperiod for the data.
     '''
     compounds = []
     mns, mxs = [], []
@@ -134,16 +205,23 @@ def sentiment_per_segment(df, sub_dfs):
         date=dates,
     ))
 
-    # dates = df.groupby('date').count()
-    plot_sentiment_over_time(compound_df)
+    plot_sentiment_over_time(compound_df, num_segments, num_tweets_per_segment, overall, selected_topic, filename)
 
     # average overall sentiment
     avg_sentiment = df['compound'].mean()
     return avg_sentiment
 
-def plot_sentiment_over_time(compound_df):
+def plot_sentiment_over_time(compound_df, num_segments, num_tweets_per_segment, overall, selected_topic, filename):
     '''
-    @param compound_df
+        Plot sentiment over time.
+
+        Args:
+            compound_df: dataframe with the compound Vader sentiment value for each segment. 
+            num_segments: number of equal segments that the data needs to be split into.
+            num_tweets_per_segment:
+            overall: boolean (true if want to analyse overall data frequency, false if not)
+            selected_topic: the topic number of the topic to be analysed.
+            filename: path to the file to which this function will output to.
     '''
     fig, ax = plt.subplots()
     ax.plot(compound_df.date, 'compouned', data=compound_df)
@@ -154,10 +232,18 @@ def plot_sentiment_over_time(compound_df):
     ax.xaxis.set_major_locator(fmt_month)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
 
-    #plot
-    plt.title('Sentiment per segment for largest topic (35 segments of ~3k)')
+    # plot
+    if overall:
+        plt.title(f'Overall Sentiment per segment ({num_segments} segments of ~{num_tweets_per_segment}k)')
+        
+    else:
+        plt.title(f'Topic {selected_topic} Sentiment per segment for largest topic ({num_segments} segments of ~{num_tweets_per_segment}k)')
+        
     plt.xlabel('Date')
     plt.ylabel('Vader Sentiment score')
     # save graph
-    plt.savefig(SENTIMENT_OVER_TIME_PER_SEGMENT_OUT)
+    plt.savefig(filename)
     plt.close()
+
+if __name__ == "__main__":
+    run()
