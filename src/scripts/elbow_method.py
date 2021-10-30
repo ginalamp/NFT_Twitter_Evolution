@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from kneed import KneeLocator # elbow method
 import pandas as pd
 import numpy as np
-from scipy.interpolate import interp1d # normalise curve
+# from scipy.interpolate import interp1d # normalise curve
 
 # NB: Need to make sure that the input LogLik column does not have any commas in the number.
 DATA_IN = '../datain/topic_modelling/ElbowMethodData.csv' # overall data LogLik values for largest community
@@ -15,9 +15,6 @@ def run():
     '''
         Run functions for elbow method for overall data.
         Uses BTM R function LogLik output (added manually to a csv).
-
-        Returns:
-            optimal_num_topics.elbow: Optimal number of topics identified by the elbow method
     '''
     print("Running elbow method")
     # get data
@@ -32,12 +29,11 @@ def run():
     y = np.concatenate(loglikvals).ravel()
 
     # apply kneelocator method
-    optimal_num_topics = plot_knee_not_normalised(x, y)
-    print("\tOptimal amount of topics (not normalised):", optimal_num_topics)
+    optimal_topics = plot_knee_not_normalised(x, y)
+    print("\tOptimal amount of topics (not normalised):", optimal_topics.elbow)
 
-    optimal_num_topics = plot_knee_normalised(x, y)
-    print("\tOptimal amount of topics (normalised):", optimal_num_topics)
-    # return str(optimal_num_topics)
+    optimal_topics = plot_knee_normalised(x, y)
+    print("\tOptimal amount of topics (normalised):", optimal_topics.elbow)
 
 def plot_knee_not_normalised(x, y):
     '''
@@ -51,7 +47,7 @@ def plot_knee_not_normalised(x, y):
     '''
     optimal_num_topics = KneeLocator(x, y, curve="concave", direction="increasing")
     optimal_num_topics.plot_knee_normalized()
-    return optimal_num_topics.elbow
+    return optimal_num_topics
 
 def plot_knee_normalised(x, y):
     '''
@@ -65,7 +61,7 @@ def plot_knee_normalised(x, y):
     '''
     optimal_num_topics = KneeLocator(x, y, curve="concave", direction="increasing", interp_method="polynomial")
     optimal_num_topics.plot_knee_normalized()
-    return optimal_num_topics.elbow
+    return optimal_num_topics
 
 if __name__ == "__main__":
     run()
