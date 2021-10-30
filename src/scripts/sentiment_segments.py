@@ -1,5 +1,7 @@
-# Outputs overall sentiment (with rounded polarity) and sentiment over time (frequency bins).
-# Also computes overall average sentiment.
+'''
+    Outputs overall sentiment (with rounded polarity) and sentiment over time (frequency bins).
+    Also computes overall average sentiment.
+'''
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -16,7 +18,10 @@ ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_overall_sentiment.jpeg"
 SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = '../dataout/sentiment/sentiment_per_segment.jpeg'
 
 def run():
-    print("running overall sentiment analysis segments...")
+    '''
+        Runs functions apply sentiment analysis on segments over time.
+    '''
+    print("Running overall sentiment analysis segments...")
     # load cleaned tweet corpus data
     df = pd.read_csv(DATA_IN)
     df = df.drop("Unnamed: 0", axis=1)
@@ -33,9 +38,12 @@ def run():
 
 def clean_sentiment_data(df):
     '''
-    Load & clean data
+        Load & clean data.
 
-    @return df cleaned df
+        Args:
+            df:
+        Returns:
+            df: cleaned df
     '''
     # remove all null created_at values from dataframe
     df = df.drop(df[df['created_at'].isnull()].index)
@@ -53,6 +61,15 @@ def clean_sentiment_data(df):
 
 
 def sentiment_polarity_score(df, filename=ROUNDED_POLARITY_OUT):
+    '''
+        Calculates the sentiment polarity score.
+
+        Args:
+            df:
+            filename:
+        Returns:
+            df:
+    '''
     analyzer = SentimentIntensityAnalyzer()
 
     # add polarity scores to df
@@ -77,7 +94,13 @@ def sentiment_polarity_score(df, filename=ROUNDED_POLARITY_OUT):
 
 def calc_polarity(x, bound):
     '''
-    Round polarity up/down based on bound.
+        Round polarity up/down based on bound.
+
+        Args:
+            x:
+            bound:
+        Returns:
+            int:
     '''
     if x < -bound:
         return -1
@@ -88,7 +111,12 @@ def calc_polarity(x, bound):
 
 def plot_rounded_polarity(num_rounded_sentiments, filename):
     '''
-    Plot rounded polariry
+        Plot rounded polariry.
+        Called by sentiment_polarity_score().
+
+        Args:
+            num_rounded_sentiments:
+            filename:
     '''
     # plot rounded negative, neutral, and positive sentiment amounts
     plt.bar(num_rounded_sentiments.index, num_rounded_sentiments["compound"])
@@ -100,6 +128,16 @@ def plot_rounded_polarity(num_rounded_sentiments, filename):
 
 
 def split_data_segments(df, num_segments=NUM_SEGMENTS):
+    '''
+        Split data into segments according to date.
+
+        Args:
+            df:
+            num_segments: number of equal segments that the data needs to be split into.
+        Returns:
+            df: sorted df by date
+            sub_dfs:
+    '''
     NUM_SEGMENTS = num_segments
 
     # sort dataframe by date
@@ -111,8 +149,14 @@ def split_data_segments(df, num_segments=NUM_SEGMENTS):
 
 def split(a, n):
     '''
-    Split df (a) into n groups of equal length (returns list of sub dataframes)
-    https://stackoverflow.com/questions/2130016/splitting-a-list-into-n-parts-of-approximately-equal-length
+        Split df (a) into n groups of equal length (returns list of sub dataframes).
+        https://stackoverflow.com/questions/2130016/splitting-a-list-into-n-parts-of-approximately-equal-length
+
+        Args:
+            a:
+            n:
+        Retuns:
+            sub dataframe according to a and n
     '''
     k, m = divmod(len(a), n)
     return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
@@ -120,7 +164,15 @@ def split(a, n):
 
 def sentiment_per_segment(df, sub_dfs, num_tweets_per_segment=NUM_TWEETS_PER_SEGMENT, filename=SENTIMENT_OVER_TIME_PER_SEGMENT_OUT):
     '''
-    Get average sentiment & plot sentiment over time
+        Get average sentiment & plot sentiment over time.
+
+        Args:
+            df:
+            sub_dfs:
+            num_tweets_per_segment:
+            filename:
+        Returns:
+            avg_sentiment: the average sentiment over the entire timeperiod for the data.
     '''
     compounds = []
     mns, mxs = [], []
@@ -147,9 +199,12 @@ def sentiment_per_segment(df, sub_dfs, num_tweets_per_segment=NUM_TWEETS_PER_SEG
 
 def plot_sentiment_over_time(compound_df, num_tweets_per_segment, filename):
     '''
-    Plot sentiment over time.
-    
-    @param compound_df
+        Plot sentiment over time.
+
+        Args:
+            compound_df:
+            num_tweets_per_segment:
+            filename:
     '''
     fig, ax = plt.subplots()
     ax.plot(compound_df.date, 'compouned', data=compound_df)

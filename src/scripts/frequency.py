@@ -1,5 +1,5 @@
 '''
-Plot tweet frequency over time for large dataset
+    Plot tweet frequency over time for large dataset
 '''
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -18,21 +18,19 @@ LARGEST_TOPIC_DATA_OUT = "../dataout/general/largest_topic_tweet_frequency.jpeg"
 # SAMPLE_DATA_IN = "../datain/topic_modelling/cleaned_tweets.csv"
 # SAMPLE_DATA_OUT = "../dataout/general/Total_tweet_frequency.jpeg"
 
-def run():
-    print("hi")
-
 def run(topic_position=1, overall=False):
     '''
-    Run frequency code.
-    Default run for largest topic.
+        Run frequency code.
+        Default run for largest topic.
 
-    @param topic_position - int (1 for largest topic, 2 for second largest, etc.)
-    @param overall - boolean (true if want to analyse overall data frequency, false if not)
+        Args:
+            topic_position: int (0 for largest topic, 1 for second largest, etc.)
+            overall: boolean (true if want to analyse overall data frequency, false if not)
     '''
     print("Running tweet frequency")
     if not overall:
         print("Setting topic I/O files...")
-        if topic_position == 1:
+        if topic_position == 0:
             data_in = LARGEST_TOPIC_DATA_IN
             data_out = LARGEST_TOPIC_DATA_OUT
         else:
@@ -68,9 +66,11 @@ def run(topic_position=1, overall=False):
 
 def plot_frequency_time(dates, data_out):
     '''
-    Plot tweet frequency over time.
+        Plot tweet frequency over time.
 
-    @param dates - df with count of number of tweets posted grouped by date
+        Args:
+            dates: df with count of number of tweets posted grouped by date
+            data_out: file to which the plot output should be written to.
     '''
     fig, ax = plt.subplots()
     ax.plot(dates.index, 'cleaned_tweet', data=dates)

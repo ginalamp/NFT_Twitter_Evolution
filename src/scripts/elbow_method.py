@@ -1,4 +1,6 @@
-# Get optimal number of topics based on BTM logLik value output (R BTM functions).
+'''
+    Get optimal number of topics based on BTM logLik value output (R BTM functions).
+'''
 
 import matplotlib.pyplot as plt
 from kneed import KneeLocator # elbow method
@@ -10,6 +12,10 @@ from scipy.interpolate import interp1d # normalise curve
 DATA_IN = '../datain/topic_modelling/ElbowMethodData.csv' # overall data LogLik values for largest community
 
 def run():
+    '''
+        Run functions for elbow method for overall data.
+        Uses BTM R function LogLik output (added manually to a csv).
+    '''
     # get data
     df = pd.read_csv(DATA_IN)
 
@@ -30,7 +36,13 @@ def run():
 
 def plot_knee_not_normalised(x, y):
     '''
-    Apply non-normalised knee method.
+        Apply non-normalised knee method.
+
+        Args:
+            x:
+            y:
+        Returns:
+            kl: Most optimal point.
     '''
     kl = KneeLocator(x, y, curve="concave", direction="increasing")
     kl.plot_knee_normalized()
@@ -38,7 +50,13 @@ def plot_knee_not_normalised(x, y):
 
 def plot_knee_normalised(x, y):
     '''
-    Apply default polynomial knee method normalisation.
+        Apply default polynomial knee method normalisation.
+
+        Args:
+            x:
+            y:
+        Returns:
+            kl: Most optimal point.
     '''
     kl = KneeLocator(x, y, curve="concave", direction="increasing", interp_method="polynomial")
     kl.plot_knee_normalized()

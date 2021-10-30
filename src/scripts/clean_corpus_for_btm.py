@@ -42,8 +42,8 @@ BTM_CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets_large
 
 def run():
     '''
-    Main running code that executes all cleaning corpus functions in the
-    correct order for the pipeline.
+        Main running code that executes all cleaning corpus functions in the
+        correct order for the pipeline.
     '''
     print("Cleaning corpus for topic modelling...")
     df = load_data()
@@ -63,10 +63,11 @@ def run():
 
 def load_data():
     '''
-    Import corpus data in json format.
-    Filter to have only english tweets and remove retweets.
+        Import corpus data in json format.
+        Filter to have only english tweets and remove retweets.
 
-    @return imported english, non-retweeted data
+        Returns:
+            imported english, non-retweeted data
     '''
     #import the data
     file_path = TWEET_CORPUS_INPUT_FILE
@@ -85,11 +86,13 @@ def load_data():
 
 def clean_tweet(tweet):
     '''
-    Cleans tweet from hashtags, mentions, special characters, html entities, numbers,
-    links, and stop words. Converts text to lower case.
+        Cleans tweet from hashtags, mentions, special characters, html entities, numbers,
+        links, and stop words. Converts text to lower case.
 
-    @param tweet - a single tweet (String)
-    @return cleaned tweet (String)
+        Args:
+            tweet: a single tweet (String)
+        Returns:
+            tweet: cleaned tweet (String)
     '''
     tweet = str.lower(tweet)
     tweet = ' '.join(re.sub("(@[A-Za-z0-9_]+)|(#[A-Za-z0-9_]+)", " ", tweet).split()) # remove mentions and hashtags
@@ -109,10 +112,12 @@ def clean_tweet(tweet):
 
 def remove_stopwords(tweet):
     '''
-    Remove stop words from the given tweet.
+        Remove stop words from the given tweet.
 
-    @param tweet - a single (cleaned) tweet (String)
-    @return tweet without stopwords (String)
+        Args:
+            tweet: a single (cleaned) tweet (String)
+        Returns:
+            tweet without stopwords (String)
     '''
     return' '.join([word for word in tweet.split() if word not in stop_words])
 
