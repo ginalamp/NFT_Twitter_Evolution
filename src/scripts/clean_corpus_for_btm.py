@@ -31,13 +31,13 @@ stop_words.append('rt')
 stop_words.append('nft')
 
 # file paths
-# TWEET_CORPUS_INPUT_FILE = "../datain/clean/largest_community_tweets.jsonl"
-# CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets_largest_community.csv"
-# BTM_CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv"
+TWEET_CORPUS_INPUT_FILE = "../datain/clean/largest_community_tweets.jsonl"
+CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets_largest_community.csv"
+BTM_CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv"
 
 # file paths for sample data
-TWEET_CORPUS_INPUT_FILE = "../datain/clean/sample100k.jsonl"
-CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets.csv"
+# TWEET_CORPUS_INPUT_FILE = "../datain/clean/sample100k.jsonl"
+# CLEANED_TWEETS_OUTPUT_FILE = "../datain/topic_modelling/cleaned_tweets.csv"
 
 
 def run():
@@ -56,8 +56,8 @@ def run():
     selected_columns = ["created_at", "id", "cleaned_tweet"]
     df.to_csv(CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns)
     # BTM output file format
-    # selected_columns = ["id", "cleaned_tweet"]
-    # df.to_csv(BTM_CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns, index=None)
+    selected_columns = ["id", "cleaned_tweet"]
+    df.to_csv(BTM_CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns, index=None)
 
     print("Finished cleaning corpus...")
 

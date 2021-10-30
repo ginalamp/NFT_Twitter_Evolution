@@ -16,8 +16,8 @@ from tqdm import tqdm
 tqdm.pandas()
 
 # file paths
-TWEET_CORPUS_INPUT_FILE = "../datain/clean/largest_community_tweets.jsonl"
-CLEANED_TWEETS_OUTPUT_FILE = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
+DATA_IN = "../datain/clean/largest_community_tweets.jsonl"
+DATA_OUT = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
 
 # file paths for sample data
 # TWEET_CORPUS_INPUT_FILE = "datain/clean/sample100k.jsonl"
@@ -37,7 +37,7 @@ def run():
 
     # output id, cleaned_tweets, and createdAt to csv
     selected_columns = ["created_at", "id", "cleaned_tweet"]
-    df.to_csv(CLEANED_TWEETS_OUTPUT_FILE, columns = selected_columns)
+    df.to_csv(DATA_OUT, columns = selected_columns)
 
     print("Finished cleaning corpus...")
 
@@ -49,7 +49,7 @@ def load_data():
     @return imported english, non-retweeted data
     '''
     #import the data
-    file_path = TWEET_CORPUS_INPUT_FILE
+    file_path = DATA_IN
     print("Loading json data")
     data = pd.read_json(file_path, lines=True)
 

@@ -1,4 +1,4 @@
-# Get optimal number of topics based on BTM logLik value output.
+# Get optimal number of topics based on BTM logLik value output (R BTM functions).
 
 import matplotlib.pyplot as plt
 from kneed import KneeLocator # elbow method
@@ -43,3 +43,6 @@ def plot_knee_normalised(x, y):
     kl = KneeLocator(x, y, curve="concave", direction="increasing", interp_method="polynomial")
     kl.plot_knee_normalized()
     return kl
+
+if __name__ == "__main__":
+    run()

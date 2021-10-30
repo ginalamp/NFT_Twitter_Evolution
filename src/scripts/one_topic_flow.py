@@ -21,22 +21,6 @@ BTM_DATA_OUT_PREFIX = "../dataout/topic_modelling/"
 SENTIMENT_DATA_IN_PREFIX = "../datain/sentiment/"
 SENTIMENT_DATA_OUT_PREFIX = "../dataout/sentiment/"
 
-# MODEL_SCORES_INPUT = BTM_DATA_IN_PREFIX + "11_model_scores.csv" # 11 topics is the most optimal
-# TOPIC_DISTRIBUTION_OUT = BTM_DATA_OUT_PREFIX + "topic_distribution_maxtopic.jpeg"
-# TOPIC_ID_OUT = SENTIMENT_DATA_IN_PREFIX + "maxtopic-ids.csv"
-# CLEANED_SENTIMENT_DATA = SENTIMENT_DATA_IN_PREFIX + "cleaned_tweets_for_sentiment.csv"
-# LARGEST_TOPIC_DATA_OUT = BTM_DATA_IN_PREFIX + "cleaned_tweets_largest_topic.csv"
-# TOPIC_ROUNDED_POLARITY_OUT = SENTIMENT_DATA_OUT_PREFIX + "rounded_largest_topic_sentiment.jpeg" # TODO: add as arguments to sentiment
-# SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = SENTIMENT_DATA_OUT_PREFIX + "sentiment_per_segment_largest_topic.jpeg" # TODO: add as arguments to sentiment
-
-# INPUT_FILE = "../BTM_topics/dataout/11_model_scores.csv" # 11 topics is the most optimal
-# TOPIC_DISTRIBUTION_OUT = "../dataout/topic_modelling/topic_distribution_maxtopic.jpeg"
-# TOPIC_ID_OUT = "../datain/sentiment/maxtopic-ids.csv"
-# CLEANED_SENTIMENT_DATA = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
-# LARGEST_TOPIC_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_largest_topic.csv"
-# TOPIC_ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_largest_topic_sentiment.jpeg"
-# SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = "../dataout/sentiment/sentiment_per_segment_largest_topic.jpeg"
-
 def run():
     '''
     Run functions
@@ -70,8 +54,9 @@ def sentiment_analysis(df):
     df = sentiment_segments.sentiment_polarity_score(df, filename)
     # segments
     df, sub_dfs = sentiment_segments.split_data_segments(df, NUM_SEGMENTS)
+    num_tweets_per_segment = round(len(sub_dfs[0]) / 1000, 1)
     filename = SENTIMENT_DATA_OUT_PREFIX + "sentiment_per_segment_largest_topic.jpeg"
-    avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, filename)
+    avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, num_tweets_per_segment, filename)
 
 
     return avg_sentiment
@@ -202,3 +187,6 @@ def sentiment_get_matching_topic_data(df):
     largest_topic_sentiment_df.to_csv(filename)
 
     return largest_topic_sentiment_df
+
+if __name__ == "__main__":
+    run()

@@ -8,6 +8,7 @@ import matplotlib.dates as mdates # plot sentiment over time
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 NUM_SEGMENTS = 34 # decided on 34 segments for overall data
+NUM_TWEETS_PER_SEGMENT = 0
 
 # Input/output files for overall data
 DATA_IN = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
@@ -25,6 +26,7 @@ def run():
     df = sentiment_polarity_score(df)
     # segments
     df, sub_dfs = split_data_segments(df)
+    NUM_TWEETS_PER_SEGMENT = round(len(sub_dfs[0]) / 1000, 1)
     avg_sentiment = sentiment_per_segment(df, sub_dfs)
     print("Average sentiment for overall is:", avg_sentiment)
 
@@ -98,6 +100,8 @@ def plot_rounded_polarity(num_rounded_sentiments, filename):
 
 
 def split_data_segments(df, num_segments=NUM_SEGMENTS):
+    NUM_SEGMENTS = num_segments
+
     # sort dataframe by date
     df = df.sort_values(by=['date', 'time'])
     # list of dfs
@@ -114,7 +118,7 @@ def split(a, n):
     return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
 
 
-def sentiment_per_segment(df, sub_dfs, filename=SENTIMENT_OVER_TIME_PER_SEGMENT_OUT):
+def sentiment_per_segment(df, sub_dfs, num_tweets_per_segment=NUM_TWEETS_PER_SEGMENT, filename=SENTIMENT_OVER_TIME_PER_SEGMENT_OUT):
     '''
     Get average sentiment & plot sentiment over time
     '''
@@ -135,14 +139,16 @@ def sentiment_per_segment(df, sub_dfs, filename=SENTIMENT_OVER_TIME_PER_SEGMENT_
     ))
 
     # dates = df.groupby('date').count()
-    plot_sentiment_over_time(compound_df, filename)
+    plot_sentiment_over_time(compound_df, num_tweets_per_segment, filename)
 
     # average overall sentiment
     avg_sentiment = df['compound'].mean()
     return avg_sentiment
 
-def plot_sentiment_over_time(compound_df, filename):
+def plot_sentiment_over_time(compound_df, num_tweets_per_segment, filename):
     '''
+    Plot sentiment over time.
+    
     @param compound_df
     '''
     fig, ax = plt.subplots()
@@ -154,10 +160,14 @@ def plot_sentiment_over_time(compound_df, filename):
     ax.xaxis.set_major_locator(fmt_month)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
 
-    #plot
-    plt.title('Sentiment per segment for largest topic (35 segments of ~3k)')
+    # plot
+    plt.title('Sentiment per segment for largest topic ({} segments of ~{}k)'.format(NUM_SEGMENTS, num_tweets_per_segment))
+    # plt.title('Sentiment per segment for largest topic (35 segments of ~3k)')
     plt.xlabel('Date')
     plt.ylabel('Vader Sentiment score')
     # save graph
     plt.savefig(filename)
     plt.close()
+
+if __name__ == "__main__":
+    run()
