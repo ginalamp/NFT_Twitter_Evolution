@@ -27,7 +27,7 @@ def run(overall=True):
         Args:
             overall: boolean (true if want to analyse overall data frequency, false if not)
     '''
-    print("Running overall sentiment analysis segments...")
+    print("Applying overall sentiment analysis on segments over time...")
     # load cleaned tweet corpus data
     df = pd.read_csv(DATA_IN)
     df = df.drop("Unnamed: 0", axis=1)
@@ -91,8 +91,7 @@ def sentiment_polarity_score(df, filename=ROUNDED_POLARITY_OUT):
     # get rounded polarity score
     round_pol = lambda x: calc_polarity(x, 0.05)
     # round polarity up/down
-    print(f"\t\tGet rounded polarity...")
-    df['rounded_polarity'] = df['compound'].progress_apply(round_pol)
+    df['rounded_polarity'] = df['compound'].apply(round_pol)
 
     # get amount of rounded negative, neutral, and positive polarity
     num_rounded_sentiments = df.groupby('rounded_polarity').count()
