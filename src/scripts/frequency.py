@@ -60,7 +60,7 @@ def run(topic_position=0, overall=False):
     # group tweets by date and count number of entries per day
     dates = df.groupby('date').count()
     plot_frequency_time(dates, overall, data_out)
-    print("\tFinished running tweet frequency")
+    print("\tGraph outputs available in dataout/")
 
 
 def plot_frequency_time(dates, overall, data_out):

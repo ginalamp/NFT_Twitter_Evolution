@@ -32,7 +32,7 @@ def run(topic_position=0, optimal_num_topics=11):
             optimal_num_topics: optimal number of topics identified by the ElbowMethod (using the R BTM LogLik values)
                 - default is 11 topics, since it is the most optimal from the data this was run.
     '''
-    print("Running selected topic flow")
+    print(f"Running normalised optimal topic flow")
     print(f"\tTopic position: {topic_position}")
     df, selected_topic = topic_modelling(topic_position, optimal_num_topics)
     avg_sentiment = sentiment_analysis(df, selected_topic)
@@ -64,17 +64,23 @@ def sentiment_analysis(df, selected_topic):
             df:
             selected_topic:
     '''
+    print("\tGetting topic sentiment...")
     # sentiment analysis
     df = sentiment_get_matching_topic_data(df, selected_topic)
+    print("a")
     df = sentiment_segments.clean_sentiment_data(df)
+    print("b")
     filename = SENTIMENT_DATA_OUT_PREFIX + f"rounded_sentiment_topic_{selected_topic}.jpeg"
     df = sentiment_segments.sentiment_polarity_score(df, filename)
     # segments
-    df, sub_dfs = sentiment_segments.split_data_segments(df, NUM_SEGMENTS)
+    print("c")
+    df, sub_dfs, num_segments = sentiment_segments.split_data_segments(df, NUM_SEGMENTS)
+    print("d")
     num_tweets_per_segment = round(len(sub_dfs[0]) / 1000, 1)
     filename = SENTIMENT_DATA_OUT_PREFIX + f"sentiment_per_segment_topic_{selected_topic}.jpeg"
-    avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, num_tweets_per_segment, filename)
-
+    print("e")
+    avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment, False, filename)
+    print("f")
 
     return avg_sentiment
 

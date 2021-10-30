@@ -37,7 +37,7 @@ def run():
 
     optimal_num_topics = plot_knee_normalised(x, y)
     print("\tOptimal amount of topics (normalised):", optimal_num_topics)
-    return optimal_num_topics
+    # return str(optimal_num_topics)
 
 def plot_knee_not_normalised(x, y):
     '''
