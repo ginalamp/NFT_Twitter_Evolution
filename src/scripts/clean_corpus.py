@@ -113,12 +113,12 @@ def clean_tweet(tweet, remove_stop):
     tweet = re.sub('\&\w+', "", tweet) # remove html entities (example &amp)
 
     if remove_stop:
-        # sentiment analysis cleaning
-        tweet = re.sub('[^a-zA-Z#,.?!\-\'();: ]+', ' ', tweet) # make sure tweet is only letters and punctuation
-        tweet = remove_stopwords(tweet)
-    else:
         # topic modelling cleaning
         tweet = re.sub('[^a-zA-Z# ]+', ' ', tweet) # make sure tweet is only letters
+        tweet = remove_stopwords(tweet)
+    else:
+        # sentiment analysis cleaning
+        tweet = re.sub('[^a-zA-Z#,.?!\-\'();: ]+', ' ', tweet) # make sure tweet is only letters and punctuation
         # convert cleaned tweet to list (each tweet being one element in the list)
         tweet = ' '.join([word for word in tweet.split()])
 
