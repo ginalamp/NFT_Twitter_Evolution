@@ -84,7 +84,7 @@ def sentiment_polarity_score(df, overall=True, selected_topic=0, filename=ROUNDE
     df['polarity'] = df["cleaned_tweet"].progress_apply(pol)
 
     # split polarity scores into separate columns
-    print(f"\t\tSplitting polarity scores into dataframe columns...")
+    print(f"\t\tSplitting polarity scores into columns...")
     df = pd.concat([df.drop(['polarity'], axis=1), df['polarity'].progress_apply(pd.Series)], axis=1)
 
     # get rounded polarity score

@@ -50,25 +50,25 @@ def run():
     df = load_data()
 
     # cleaning for sentiment analysis (keep stop words)
-    print("\tCleaning tweets for sentiment analysis")
+    print("\tSentiment analysis cleaning...")
     remove_stop = False
     df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
 
-    print("\twriting sentiment cleaned data to csv...")
+    print("\tWriting sentiment cleaned data to csv...")
     selected_columns = ["created_at", "id", "cleaned_tweet"] # output created_at, id, and cleaned_tweets to csv
     df.to_csv(SENTIMENT_DATA_OUT, columns = selected_columns)
 
     # cleaning for topic modelling (remove stop words)
-    print("\tCleaning tweets for topic modelling")
+    print("\tTopic modelling cleaning...")
     remove_stop = True
     df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
 
-    print("\twriting topic modelling cleaned data to csv...")
+    print("\tWriting topic modelling cleaned data to csv...")
     df.to_csv(FREQUENCY_DATA_OUT, columns = selected_columns) # frequency data needs dates
     selected_columns = ["id", "cleaned_tweet"] # BTM algorithm R script file format
     df.to_csv(BTM_DATA_OUT, columns = selected_columns, index=None)
 
-    print("Finished cleaning corpus...")
+    print("Finished cleaning corpus. The next steps will start in a few moments...")
 
 def load_data():
     '''
