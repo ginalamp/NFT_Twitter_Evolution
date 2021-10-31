@@ -237,7 +237,7 @@ def plot_sentiment_over_time(compound_df, num_segments, num_tweets_per_segment, 
         plt.title(f'Overall Sentiment per segment ({num_segments} segments of ~{num_tweets_per_segment}k)')
         
     else:
-        plt.title(f'Topic {selected_topic} Sentiment per segment for largest topic ({num_segments} segments of ~{num_tweets_per_segment}k)')
+        plt.title(f'Topic {selected_topic} Sentiment per segment ({num_segments} segments of ~{num_tweets_per_segment}k)')
         
     plt.xlabel('Date')
     plt.ylabel('Vader Sentiment score')
