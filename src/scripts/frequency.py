@@ -28,7 +28,8 @@ def run(overall=False, selected_topic=11):
     if not overall:
         print("Calculating selected topic tweet frequency...")
         print("\tSetting topic I/O files...")
-        data_in = TOPIC_DATA_IN_PREFIX + f"tweet_sentiment_subdf_topic_{selected_topic}.csv"
+        # data_in = TOPIC_DATA_IN_PREFIX + f"tweet_sentiment_subdf_topic_{selected_topic}.csv"
+        data_in = TOPIC_DATA_IN_PREFIX + f"tweet_topic_subdf_topic_{selected_topic}.csv"
         data_out = TOPIC_DATA_OUT_PREFIX + f"tweet_frequency_topic_{selected_topic}.jpeg"
     else:
         print("Calculating overall tweet frequency...")
