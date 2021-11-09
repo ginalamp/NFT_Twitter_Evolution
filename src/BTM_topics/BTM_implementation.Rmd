@@ -28,7 +28,7 @@ df
 ```
 ```{r}
 clean_tweets <- function(tweets_in) {
-  # remove stopwords, links, mentions, special characters, and numbers
+  # unnest tokens
   tidy_tweets <- tweets_in %>% 
     unnest_tokens(word, cleaned_tweet, token = "tweets")
 
@@ -72,7 +72,7 @@ if (RUN_LOGLIK) {
 ```
 
 ```{r the probability of terms being in a particular topic}
-topicterms <- terms(model, top_n = 10)
+topicterms <- terms(model, top_n = 20)
 topicterms
 ```
 
@@ -127,9 +127,34 @@ dev.off()
 
 plot(model, labels = 1:model$K)
 ```
+```{r}
+library(igraph)
+library(ggforce)
+```
 
+
+```{r}
+ggplot_build.ggplot()
+```
+
+```{r}
+plot(model, title = "BTM model", which = 7:15)
+```
+xx
 ```{r plot topic 11 (the largest topic)}
-plot(model, which = 11, labels = 11)
+plot(model, which = 11, top_n = 20, title="Topic 11")
+```
+```{r save topic 11 as vector/pdf with labels}
+# Step 1: Call the pdf command to start the plot
+pdf(file = "/Users/ginalamp/Desktop/model_11_alone_2_2_10terms.pdf",   # The directory you want to save the file in
+    width = 3, # The width of the plot in inches
+    height = 2.7) # The height of the plot in inches
+
+# Step 2: Create the plot with R code
+plot(model, which = 11, top_n = 10, title="Topic 11")
+
+# Step 3: Run dev.off() to create the file!
+dev.off()
 ```
 
 ```{r}

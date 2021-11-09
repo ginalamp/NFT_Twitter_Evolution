@@ -38,7 +38,7 @@ def run(topic_position=0, optimal_num_topics=11):
 
     return selected_topic
 
-def topic_modelling(topic_position, optimal_num_topics):
+def topic_modelling(topic_position, optimal_num_topics=11):
     '''
         Run topic modelling related functions.
 
@@ -55,6 +55,7 @@ def topic_modelling(topic_position, optimal_num_topics):
     print(f"\tThe selected topic is: {selected_topic}")
     plot_topic_distribution(df)
     export_topic_ids(df, selected_topic)
+    cleaned_community_get_matching_topic_data(selected_topic)
 
     return df, selected_topic
 
@@ -87,7 +88,7 @@ def sentiment_analysis(df, selected_topic):
 # *** Topic modelling
 # ******************************************************************************************
 
-def load_data(optimal_num_topics):
+def load_data(optimal_num_topics=11):
     '''
         Get data.
 
@@ -193,6 +194,31 @@ def export_topic_ids(df, selected_topic):
     # export selected columns to csv
     selected_columns = []
     selected_topic_df.to_csv(filename, columns = selected_columns)
+
+def cleaned_community_get_matching_topic_data(selected_topic):
+    '''
+        Get the subset of the topic modelling data from the cleaned topic modelling data 
+        (use the topic IDs to get the overal cleaned topic data matching those ids).
+
+        Args:
+            selected_topic: the topic number of the topic to be analysed.
+    '''
+    filename = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
+    # load cleaned btm tweet corpus data
+    cleaned_btm_df = pd.read_csv(filename)
+    cleaned_btm_df = cleaned_btm_df.drop("Unnamed: 0", axis=1)
+
+    # load topic ids
+    filename = SENTIMENT_DATA_IN_PREFIX + f"ids_topic_{selected_topic}.csv"
+    selected_topic_ids = pd.read_csv(filename)
+
+    # subset overall topic data with topic ids
+    selected_topic_btm_df = selected_topic_ids.merge(cleaned_btm_df, on='id', how='left')
+
+    # export selected topic to csv
+    filename = BTM_DATA_IN_PREFIX + f"tweet_topic_subdf_topic_{selected_topic}.csv"
+    selected_topic_btm_df.to_csv(filename)
+
 
 
 # ******************************************************************************************

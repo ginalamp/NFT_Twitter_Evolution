@@ -86,7 +86,7 @@ def load_data():
     data = pd.read_json(filename, lines=True)
 
     # clean data: remove retweets and select only english tweets
-    print("\tRemoving reweets and non-english tweets...")
+    print("\tRemoving retweets and non-english tweets...")
     data = data[~data["text"].progress_apply(lambda x: x.startswith("RT"))]
     data = data[data["lang"].progress_apply(lambda x: x == "en")]
     data = data.rename(columns={'text': 'corpus'})
