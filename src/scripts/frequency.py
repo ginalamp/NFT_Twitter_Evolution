@@ -4,6 +4,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
+import numpy as np
 
 # file paths
 OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets_largest_community.csv" # overall tweets
@@ -70,15 +72,24 @@ def plot_frequency_time(dates, overall, selected_topic, data_out):
     '''
     fig, ax = plt.subplots()
     ax.plot(dates.index, 'cleaned_tweet', data=dates)
+
+    # add trendline
+    ax2 = ax.twiny()
+    z = np.polyfit(range(len(dates["cleaned_tweet"])), dates['cleaned_tweet'], 3)
+    p = np.poly1d(z)
+    x = range(len(dates["cleaned_tweet"]))
+    plt.plot(x, p(x), color='orange')
+
     # Major ticks every 6 months.
     fmt_half_year = mdates.MonthLocator(interval=1)
     ax.xaxis.set_major_locator(fmt_half_year)
+    ax2.xaxis.set_major_locator(ticker.NullLocator())
     # plot
     if overall:
         plt.title('Overall Tweet Frequency over time: 1 Feb - 31 May')
     else:
         plt.title(f'Topic {selected_topic} Tweet Frequency over time: 1 Feb - 31 May')
-    plt.xlabel('Date')
+    ax.set_xlabel('Date')
     plt.ylabel('Number of Tweets')
     plt.savefig(data_out)
     plt.close()
