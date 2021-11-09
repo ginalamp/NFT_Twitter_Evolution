@@ -18,7 +18,7 @@ NUM_SEGMENTS = 34 # decided on 34 segments for overall data
 # Input/output files for overall data
 DATA_IN = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
 ROUNDED_POLARITY_OUT = "../dataout/sentiment/rounded_sentiment_overall.jpeg"
-SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = '../dataout/sentiment/sentiment_per_segment_overall.jpeg'
+SENTIMENT_OVER_TIME_PER_SEGMENT_OUT = '../dataout/sentiment/sentiment_per_segment_overall.pdf'
 
 def run():
     '''
