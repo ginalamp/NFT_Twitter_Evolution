@@ -81,16 +81,18 @@ def plot_frequency_time(dates, overall, selected_topic, data_out, trendline):
     if trendline:
         plt.plot(x, p(x), color='orange')
 
-    # Major ticks every 6 months.
-    fmt_half_year = mdates.MonthLocator(interval=1)
-    ax.xaxis.set_major_locator(fmt_half_year)
+    # Major ticks every month.
+    fmt_month = mdates.MonthLocator()
+    ax.xaxis.set_major_locator(fmt_month)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
     ax2.xaxis.set_major_locator(ticker.NullLocator())
     # plot
     if overall:
-        plt.title('Overall Tweet Frequency over time: 1 Feb - 31 May')
+        plt.title('Overall Tweet Frequency over time')
     else:
-        plt.title(f'Topic {selected_topic} Tweet Frequency over time: 1 Feb - 31 May')
-    ax.set_xlabel('Date')
+        plt.title(f'Topic {selected_topic}: Tweet Frequency over time')
+        ax.set_xlabel('Date')
+
     plt.ylabel('Number of Tweets')
     plt.savefig(data_out)
     plt.close()
