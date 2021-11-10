@@ -70,14 +70,17 @@ def plot_frequency_time(dates, overall, selected_topic, data_out):
     '''
     fig, ax = plt.subplots()
     ax.plot(dates.index, 'cleaned_tweet', data=dates)
-    # Major ticks every 6 months.
-    fmt_half_year = mdates.MonthLocator(interval=1)
-    ax.xaxis.set_major_locator(fmt_half_year)
+
+    # Major ticks every month.
+    fmt_month = mdates.MonthLocator()
+    ax.xaxis.set_major_locator(fmt_month)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
+
     # plot
     if overall:
-        plt.title('Overall Tweet Frequency over time: 1 Feb - 31 May')
+        plt.title('Overall Tweet Frequency over time')
     else:
-        plt.title(f'Topic {selected_topic} Tweet Frequency over time: 1 Feb - 31 May')
+        plt.title(f'Topic {selected_topic}: Tweet Frequency over time')
     plt.xlabel('Date')
     plt.ylabel('Number of Tweets')
     plt.savefig(data_out)

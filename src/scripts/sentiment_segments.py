@@ -228,7 +228,6 @@ def plot_sentiment_over_time(compound_df, num_segments, num_tweets_per_segment, 
 
     # Major ticks every month.
     fmt_month = mdates.MonthLocator()
-
     ax.xaxis.set_major_locator(fmt_month)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
 
