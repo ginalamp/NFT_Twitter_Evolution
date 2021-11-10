@@ -1,9 +1,12 @@
 
 # Added
 dataout/
+datain/sentiment
+datain/topic_modelling
 *largest_community*
 *.html
 tweets/
+truncated*
 
 # Created by https://www.toptal.com/developers/gitignore/api/r,python,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=r,python,macos
