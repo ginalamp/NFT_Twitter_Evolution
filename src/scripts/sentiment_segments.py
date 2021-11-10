@@ -6,6 +6,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates # plot sentiment over time
+import seaborn as sns
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
@@ -206,6 +207,9 @@ def sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment, ove
     ))
 
     plot_sentiment_over_time(compound_df, num_segments, num_tweets_per_segment, overall, selected_topic, filename)
+    boxplot_filename = filename.replace('.pdf','_boxplot.pdf')
+    plot_sentiment_boxplot(compound_df, boxplot_filename)
+    
 
     # average overall sentiment
     avg_sentiment = df['compound'].mean()
@@ -240,6 +244,22 @@ def plot_sentiment_over_time(compound_df, num_segments, num_tweets_per_segment, 
         
     plt.xlabel('Date')
     plt.ylabel('Vader Sentiment score')
+    # save graph
+    plt.savefig(filename)
+    plt.close()
+
+def plot_sentiment_boxplot(compound_df, filename):
+    '''
+        Plot boxplot
+
+        Args:
+            compound_df: dataframe with the compound Vader sentiment value for each segment.
+            filename: path to the file to which this function will output to.
+    '''
+    sns.set_theme(style="whitegrid")
+    tips = compound_df['compouned']
+    ax = sns.boxplot(x=tips)
+
     # save graph
     plt.savefig(filename)
     plt.close()
