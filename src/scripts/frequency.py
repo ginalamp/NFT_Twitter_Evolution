@@ -26,6 +26,7 @@ def run(overall=False, selected_topic=11, trendline=True):
         Args:
             overall: boolean (true if want to analyse overall data frequency, false if not)
             selected_topic: the selected topic number
+            trendline: boolean (true if a trendline should be plotted, false otherwise)
     '''
     if not overall:
         print("Calculating selected topic tweet frequency...")
@@ -69,6 +70,7 @@ def plot_frequency_time(dates, overall, selected_topic, data_out, trendline):
             overall: True if is for an overall analysis, False if it is for a topic's analysis.
             selected_topic: the selected topic number
             data_out: path to the file to which this function will output to.
+            trendline: boolean (true if a trendline should be plotted, false otherwise)
     '''
     fig, ax = plt.subplots()
     ax.plot(dates.index, 'cleaned_tweet', data=dates)
