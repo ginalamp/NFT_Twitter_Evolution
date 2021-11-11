@@ -1,8 +1,7 @@
 
 # Added
 dataout/
-datain/sentiment
-datain/topic_modelling
+*/datain/*
 *largest_community*
 *.html
 tweets/
