@@ -27,7 +27,8 @@ if __name__ == "__main__":
     create_output_directories()
 
     # topic modelling & sentiment cleaning (only clean if haven't cleaned before)
-    if not os.path.exists('../datain/clean'):
+    # if not os.path.exists('../datain/clean'):
+    if True:
         clean_corpus.run()
     else:
         print("Skipping cleaning cleaning step (already cleaned data in previous run)")
