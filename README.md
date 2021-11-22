@@ -66,7 +66,7 @@ import frequency as f
 f.run() # runs frequency code with default parameters
 f.run(overall=True) # runs frequency code on overall data
 f.run(trendline=False) # without trend line
-f.run(selected_topic = 3, trendline=False) # for topic 3 and without trend line
+f.run(selected_topic=3, trendline=False) # for topic 3 and without trend line
 ```
 
 # Output
