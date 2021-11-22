@@ -21,7 +21,7 @@ cd src/scripts/
 python3 clean_corpus.py
 ```
 1. Extract `tweets.zip`, and move the file to `datain/clean/`
-    - **INPUT:** `tweets.zip` contains a [Tweet object v2](https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet) file.
+    - **INPUT:** `tweets.zip` contains a [Tweet object v2](https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet) `jsonl` file.
 2. In `src/scripts/`, run `python3 clean_corpus.py`. This will clean the data.
 
 ## Run BTM R code
@@ -31,7 +31,7 @@ The needed output based on the `tweets.jsonl`'s cleaned data has been run throug
 
 The BTM code is a bit manual currently, but is well documented if you want to automate it a bit into a script.
 * Install dependencies according to imports.
-* Running `LogLik` is set to `False` by default (set to `True` if want to run again). 
+* Running LogLik (which determines how optimal the amount of topics is) is set to `False` by default (set to `True` if want to run it - this takes extra time). 
     - Need to manually take note of the LogLik values (csv with the number of topics and LogLik value is used as input in `python3 elbow_method.py`)
 
 1. Run the `BTM_implementation.Rmd` notebook in `src/BTM_topics`.
