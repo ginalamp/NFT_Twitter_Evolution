@@ -37,6 +37,7 @@ The BTM code is a bit manual currently, but is well documented if you want to au
 
 ## Run all Python Scripts
 ```
+cd src/scripts
 python3 run_scripts.py
 ```
 
