@@ -69,6 +69,24 @@ f.run(trendline=False) # without trend line
 f.run(selected_topic=3, trendline=False) # for topic 3 and without trend line
 ```
 
+## Prepping data for frequency/sentiment analysis for all topics
+This is necessary if you wish to run any sentiment or frequency code on any given topic. By default, `run_scripts.py` only includes topic 11.
+```py
+import single_topic_analysis as sta
+for i in range(11):
+    sta.run(topic_position=i)
+```
+
+### Running topic frequency on multiple topics
+After running the above, you can get a merged frequency graph by running the code below. By default, this will merge a graph with topics 1, 5, 6, and 7. To change this, see the `plot_frequency_merge_time()` function in `src/scripts/frequency.py`.
+
+```py
+import frequency as f
+f.plot_frequency_merge_time()
+```
+
+Similarly, the data can also be used to plot merged sentiment graphs (see `src/notebooks/merge-sentiment-graphs.ipynb`).
+
 # Output
 Final output of the Python script is generated in `src/dataout/`
 * Tweet frequency
@@ -76,7 +94,7 @@ Final output of the Python script is generated in `src/dataout/`
 * Topic distribution
 
 Merged graphs
-* Merged graph output for sentiment can be generated through running the `merge-sentiment-graphs.ipynb` notebook.
+* Merged graph output for sentiment can be generated through running the `merge-sentiment-graphs.ipynb` notebook in `src/notebooks`.
 
 BTM topic modelling
 * BTM output can be found in the `BTM_topics/`
