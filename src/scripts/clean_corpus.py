@@ -11,9 +11,10 @@
 import pandas as pd
 import re
 import string
+import os # create directories
 
 # !pip3 install nltk
-# nltk.download() # run this the first time you run nltk in a python interpreter and download "all"
+# nltk.download() # run this the first time you run nltk in a python interpreter and download "stopwords"
 from nltk.corpus import stopwords
 
 # progress bar
@@ -48,6 +49,7 @@ def run():
         Clean corpus for sentiment and topic modelling code.
     '''
     print("Cleaning corpus...")
+    create_directories()
     df = load_data()
 
     # cleaning for sentiment analysis (keep stop words)
@@ -70,6 +72,17 @@ def run():
     df.to_csv(BTM_DATA_OUT, columns = selected_columns, index=None)
 
     print("Finished cleaning corpus. The next steps will start in a few moments...")
+
+def create_directories():
+    '''
+        Create input/output directories if they don't exist.
+    '''
+    if not os.path.exists('../datain/clean'):
+        os.makedirs('../datain/clean')
+    if not os.path.exists('../datain/sentiment'):
+        os.makedirs('../datain/sentiment')
+    if not os.path.exists('../datain/topic_modelling'):
+        os.makedirs('../datain/topic_modelling')
 
 def load_data():
     '''
