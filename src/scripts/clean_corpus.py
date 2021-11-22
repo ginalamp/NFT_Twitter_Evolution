@@ -95,12 +95,12 @@ def load_data():
     # import the data
     filename = TWEET_CORPUS_DATA_IN
     print("\tLoading json data...")
-    print("\t\tThis can take a while (about ~5 minutes for ~0.5 million entries on an 8-core CPU Macbook Air M1 2020)")
+    print("\t\tThis can take a while (~5 minutes for ~0.5 million entries on an 8-core CPU Macbook Air M1 2020)")
     print("\t\tGo make yourself a cup of hot thing ;)")
     data = pd.read_json(filename, lines=True)
 
-    # clean data: remove retweets and select only english tweets
-    print("\tRemoving retweets and non-english tweets...")
+    # clean data: remove retweets and select only English tweets
+    print("\tRemoving retweets and non-English tweets...")
     data = data[~data["text"].progress_apply(lambda x: x.startswith("RT"))]
     data = data[data["lang"].progress_apply(lambda x: x == "en")]
     data = data.rename(columns={'text': 'corpus'})
