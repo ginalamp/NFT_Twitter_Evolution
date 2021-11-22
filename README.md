@@ -23,7 +23,7 @@ cd src/scripts/
 python3 clean_corpus.py
 ```
 1. Extract `tweets.zip`, and move the file to `datain/clean/`
-    - **INPUT:** `tweets.zip` contains a [Tweet object v2](https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet) `jsonl` file.
+    - **INPUT:** `tweets.zip` contains a [Twitter v2 Tweet object](https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet) in a **.jsonl** file.
 2. In `src/scripts/`, run `python3 clean_corpus.py`. This will clean the data.
 
 ## Run BTM R code
@@ -78,11 +78,13 @@ for i in range(11):
 ```
 
 ### Running topic frequency on multiple topics
-After running the above, you can get a merged frequency graph by running the code below. By default, this will merge a graph with topics 1, 5, 6, and 7. To change this, see the `plot_frequency_merge_time()` function in `src/scripts/frequency.py`.
+After running the above, you can get each topic's frequency as well as a merged frequency graph by running the code below. By default, this will merge a graph with topics 1, 5, 6, and 7. To change this, see the `plot_frequency_merge_time()` function in `src/scripts/frequency.py`.
 
 ```py
 import frequency as f
-f.plot_frequency_merge_time()
+for i in range(1, 12):
+    f.run(selected_topic=i) # frequency graph for an individual topic.
+f.plot_frequency_merge_time() # merged frequency graph for topics 1, 5, 6, and 7.
 ```
 
 Similarly, the data can also be used to plot merged sentiment graphs (see `src/notebooks/merge-sentiment-graphs.ipynb`).
@@ -94,7 +96,7 @@ Final output of the Python script is generated in `src/dataout/`
 * Topic distribution
 
 Merged graphs
-* Merged graph output for sentiment can be generated through running the `merge-sentiment-graphs.ipynb` notebook in `src/notebooks`.
+* Merged graph output for sentiment can be generated through running the `merge-sentiment-graphs.ipynb` notebook in `src/notebooks/`.
 
 BTM topic modelling
 * BTM output can be found in the `BTM_topics/`
