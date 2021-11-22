@@ -38,8 +38,9 @@ SENTIMENT_DATA_OUT = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
 
 # file paths for sample data
 # TWEET_CORPUS_DATA_IN = "../datain/clean/sample100k.jsonl"
-# BTM_DATA_OUT = "../datain/topic_modelling/cleaned_tweets.csv"
-# SENTIMENT_DATA_OUT = "../datain/sentiment/cleaned_tweets.csv"
+# FREQUENCY_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_sample.csv"
+# BTM_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_btm_sample.csv"
+# SENTIMENT_DATA_OUT = "../datain/sentiment/cleaned_tweets_sample.csv"
 
 
 def run():
@@ -59,14 +60,14 @@ def run():
     df.to_csv(SENTIMENT_DATA_OUT, columns = selected_columns)
 
     # cleaning for topic modelling (remove stop words)
-    # print("\tTopic modelling cleaning...")
-    # remove_stop = True
-    # df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
+    print("\tTopic modelling cleaning...")
+    remove_stop = True
+    df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
 
-    # print("\tWriting topic modelling cleaned data to csv...")
-    # df.to_csv(FREQUENCY_DATA_OUT, columns = selected_columns) # frequency data needs dates
-    # selected_columns = ["id", "cleaned_tweet"] # BTM algorithm R script file format
-    # df.to_csv(BTM_DATA_OUT, columns = selected_columns, index=None)
+    print("\tWriting topic modelling cleaned data to csv...")
+    df.to_csv(FREQUENCY_DATA_OUT, columns = selected_columns) # frequency data needs dates
+    selected_columns = ["id", "cleaned_tweet"] # BTM algorithm R script file format
+    df.to_csv(BTM_DATA_OUT, columns = selected_columns, index=None)
 
     print("Finished cleaning corpus. The next steps will start in a few moments...")
 
@@ -78,7 +79,7 @@ def load_data():
         Returns:
             imported english, non-retweeted data
     '''
-    #import the data
+    # import the data
     filename = TWEET_CORPUS_DATA_IN
     print("\tLoading json data...")
     print("\t\tThis can take a while (about ~10 minutes on current largest community data)")
@@ -97,19 +98,21 @@ def load_data():
 
 def clean_tweet(tweet, remove_stop):
     '''
-        Cleans tweet from hashtags, mentions, special characters, html entities, numbers,
-        links, and stop words. Converts text to lower case.
+        Cleans tweet by from mentions, hashtags, links, crypto wallet addresses, html entities.
+            If remove_stop = True, then it cleans for topic modelling, where it removes the stop words and 
+            ensures that the tweet is only letters.
+            Otherwise it cleans for sentiment analysis, where it adds spaces between emojis.
 
         Args:
             tweet: a single tweet (String)
-            remove_stop: True if stopwords should be removed and False if they should not be removed.
+            remove_stop: True if stop words should be removed and False if they should not be removed.
         Returns:
             tweet: cleaned tweet (String)
     '''
     tweet = str.lower(tweet)
     tweet = ' '.join(re.sub("(@[A-Za-z0-9_]+)|(#[A-Za-z0-9_]+)", " ", tweet).split()) # remove mentions and hashtags
     tweet = re.sub("(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)", "", tweet, flags=re.MULTILINE) # remove links
-    tweet = re.sub("0x([\da-z\.-]+)", "", tweet, flags=re.MULTILINE) # remove addresses/pointers
+    tweet = re.sub("0x([\da-z\.-]+)", "", tweet, flags=re.MULTILINE) # remove crypto wallet addresses
     tweet = re.sub('\&\w+', "", tweet) # remove html entities (example &amp)
 
     if remove_stop:
@@ -119,7 +122,6 @@ def clean_tweet(tweet, remove_stop):
     else:
         # sentiment analysis cleaning
         tweet = add_space_between_emojis(tweet)
-        # tweet = re.sub('[^a-zA-Z#,.?!\-\'();: ]+', ' ', tweet) # make sure tweet is only letters and punctuation
         # convert cleaned tweet to list (each tweet being one element in the list)
         tweet = ' '.join([word for word in tweet.split()])
 
@@ -138,9 +140,15 @@ def remove_stopwords(tweet):
     return' '.join([word for word in tweet.split() if word not in stop_words])
 
 def add_space_between_emojis(tweet):
+    '''
+        Add spaces between emojis for the given tweet.
+
+        Args:
+            tweet: a single (cleaned) tweet (String)
+        Returns:
+            tweet with spaces between the emojis (String)
+    '''
     # source: https://gist.github.com/Alex-Just/e86110836f3f93fe7932290526529cd1
-    # Ref: https://gist.github.com/Alex-Just/e86110836f3f93fe7932290526529cd1#gistcomment-3208085
-    # Ref: https://en.wikipedia.org/wiki/Unicode_block
     EMOJI_PATTERN = re.compile(
         "(["
         "\U0001F1E0-\U0001F1FF"  # flags (iOS)
