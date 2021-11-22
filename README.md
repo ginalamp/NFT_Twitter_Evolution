@@ -77,4 +77,4 @@ Merged graphs
 * Merged graph output for sentiment can be generated through running the `merge-sentiment-graphs.ipynb` notebook.
 
 BTM topic modelling
-* BTM output can be found in the `BTM_topics` folder.
+* BTM output can be found in the `BTM_topics/`
