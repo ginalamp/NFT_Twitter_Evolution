@@ -82,6 +82,9 @@ def run(overall=False, selected_topic=11, trendline=True):
 
     # plot frequency graphs
     plot_frequency_time(dates, overall, selected_topic, data_out, trendline)
+    if not overall:
+        # plot merged frequency topic graph
+        plot_frequency_merge_time()
     print("\tOutput available in dataout/general/")
 
 
@@ -120,6 +123,63 @@ def plot_frequency_time(dates, overall, selected_topic, data_out, trendline):
     
     plt.savefig(data_out)
     plt.close()
+
+def plot_frequency_merge_time():
+    '''
+        Plot sentiment over time for multiple topics.
+        Currently set to topics 1, 5, 6, and 7.
+    '''
+    # get data
+    TOPIC_SUBDF_DATA_IN_PREFIX = TOPIC_DATA_IN_PREFIX + "tweet_topic_subdf_topic_"
+    data_out = TOPIC_DATA_OUT_PREFIX + f"tweet_frequency_topic_1567.pdf"
+
+    dates1 = prep_df_merged_graph(pd.read_csv(TOPIC_SUBDF_DATA_IN_PREFIX + "1.csv"))
+    dates5 = prep_df_merged_graph(pd.read_csv(TOPIC_SUBDF_DATA_IN_PREFIX + "5.csv"))
+    dates6 = prep_df_merged_graph(pd.read_csv(TOPIC_SUBDF_DATA_IN_PREFIX + "6.csv"))
+    dates7 = prep_df_merged_graph(pd.read_csv(TOPIC_SUBDF_DATA_IN_PREFIX + "7.csv"))
+
+    # set plot lines data
+    fig, ax = plt.subplots()
+    ax.plot(dates1.index, 'cleaned_tweet', data=dates1, label="Topic 1")
+    ax.plot(dates5.index, 'cleaned_tweet', data=dates5, label="Topic 5")
+    ax.plot(dates6.index, 'cleaned_tweet', data=dates6, label="Topic 6")
+    ax.plot(dates7.index, 'cleaned_tweet', data=dates7, label="Topic 7")
+
+    # Major ticks every month.
+    fmt_month = mdates.MonthLocator()
+    ax.xaxis.set_major_locator(fmt_month)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
+
+    # plot
+    plt.title(f'Tweet Frequency of Topics 1, 5, 6 and 7')
+    plt.legend(loc="upper left")
+    
+    # save graph
+    plt.savefig(data_out)
+    plt.close()
+
+
+def prep_df_merged_graph(df):
+    '''
+        Remove unneccessary columns & invalid values, and add date/time columns.
+        
+        Args:
+            df: dataframe to be cleaned.
+            dates: cleaned df grouped by date.
+    '''
+    df = df.drop("Unnamed: 0", axis=1)
+    # remove any null created_at values from dataframe
+    df = df.drop(df[df['created_at'].isnull()].index)
+    # ensure that all values in created_at has 2021 (and not random strings)
+    df = df[df['created_at'].str.contains("2021")]
+
+    # split created_at into date and time columns
+    df['created_at'] = pd.to_datetime(df['created_at'])
+    df['date'] = df['created_at'].dt.date
+    df['time'] = df['created_at'].dt.time
+    
+    dates = df.groupby('date').count()
+    return dates
 
 if __name__ == "__main__":
     run(overall=True)
