@@ -14,7 +14,7 @@ import string
 import os # create directories
 
 # !pip3 install nltk
-# nltk.download() # run this the first time you run nltk in a python interpreter and download "stopwords"
+# nltk.download('stopwords') # run this the first time you run nltk in a python interpreter
 from nltk.corpus import stopwords
 
 # progress bar
@@ -53,7 +53,7 @@ def run():
     df = load_data()
 
     # cleaning for sentiment analysis (keep stop words)
-    print("\tSentiment analysis cleaning...")
+    print("\n\tSentiment analysis cleaning...")
     remove_stop = False
     df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
 
@@ -62,7 +62,7 @@ def run():
     df.to_csv(SENTIMENT_DATA_OUT, columns = selected_columns)
 
     # cleaning for topic modelling (remove stop words)
-    print("\tTopic modelling cleaning...")
+    print("\n\tTopic modelling cleaning...")
     remove_stop = True
     df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
 
@@ -95,7 +95,7 @@ def load_data():
     # import the data
     filename = TWEET_CORPUS_DATA_IN
     print("\tLoading json data...")
-    print("\t\tThis can take a while (about ~10 minutes on current largest community data)")
+    print("\t\tThis can take a while (about ~15 minutes for ~0.5 million entries)")
     print("\t\tGo make yourself a cup of hot thing ;)")
     data = pd.read_json(filename, lines=True)
 
@@ -104,7 +104,6 @@ def load_data():
     data = data[~data["text"].progress_apply(lambda x: x.startswith("RT"))]
     data = data[data["lang"].progress_apply(lambda x: x == "en")]
     data = data.rename(columns={'text': 'corpus'})
-    print()
 
     return data
 
