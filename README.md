@@ -1,38 +1,26 @@
-# Twitter Crypto Intra Community Analysis
-ISMTwitter Crypto Intra Community Analysis - ISMHons 2021
+# NFT Twitter Evolution 2021
 
-[Overleaf Intra-Community Analysis](https://www.overleaf.com/project/60be345cbd71c045f451e5d1)
+See `Twitter_NFT_Evolution_2021.pdf` for the full report.
 
+# Usage
+need to make sure that tweets.zip is extracted, moved to `datain/clean/` and renamed to `largest_community_tweets.jsonl`
 
-## Usage
+## Run BTM R code
+Run `BTM_implementation.Rmd` after running the BTM topic modelling cleaning code. Elbow method.
 
-### Run all
-Runs all python scripts (`clean_corpus.py, topic_modelling.py, sentiment_analysis.py`) automatically.
+## Run all Python Scripts
+Runs all python scripts automatically.
+* Precondition: Need BTM R script output (Run R script first).
+* Does not run the Elbow Method
 
 ```python3 run_scripts.py```
 
-NOTE: need to run BTM scipt on cleaned corpus first - currently the K20 files for the 100k tweets are
-explicitly added to `datain/topic_modelling`, but if a new corpus is used, we need to run the BTM
-algorithm on that corpus and add the output to this folder accordingly. (TODO automate this part too)
-
-
-### Individual scripts
-Can run any of the python scripts individually through
+## Individual scripts
+Python scripts can be run individually by going to `src/scripts/` and running:
 
 ```python3 <file_name.py>```
 
-## Output
-Usable output is generated in `dataout/`
+# Output
+Final output generated in `src/dataout/`
 
-## Jupyter Notebook
-In `notebooks/`
-
-NOTE: the scripts are more up to date than the Jupyter Notebooks - the notebooks were generally used for creating the scripts and being able to follow the state of the dataframes step by step.
-
-Automated pipeline through Jupyter Notebook:
-1. clean_corpus.ipynb
-2. topic_modelling.ipynb
-3. sentiment_analysis.ipynb
-
-## LDA topic modeling
-lda_tuning.Rmd and lda_topic_modeling.Rmd use the tweets in data/cleaned_tweets.csv for tuning and modeling topics respectively. Plots are output and saved to jpeg files.
+Merged graph output for sentiment and frequency can be generated through running the notebooks.
