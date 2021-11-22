@@ -50,25 +50,6 @@ Runs all Python scripts automatically and in order.
     - `<numTopics` is based on the number of topics the BTM code was run with. Default is 11.
 * Does not run the Elbow Method.
 
-
-## Individual scripts
-Python scripts can be run by running:
-
-```
-cd src/scripts
-python3 <file_name.py>
-```
-
-or by importing the modules in a python interpreter in `src/scripts`, for example in `ipython3`:
-
-```py
-import frequency as f
-f.run() # runs frequency code with default parameters
-f.run(overall=True) # runs frequency code on overall data
-f.run(trendline=False) # without trend line
-f.run(selected_topic=3, trendline=False) # for topic 3 and without trend line
-```
-
 ## Prepping data for frequency/sentiment analysis for all topics
 This is necessary if you wish to run any sentiment or frequency code on any given topic. By default, `run_scripts.py` only includes topic 11.
 ```py
@@ -88,6 +69,24 @@ f.plot_frequency_merge_time() # merged frequency graph for topics 1, 5, 6, and 7
 ```
 
 Similarly, the data can also be used to plot merged sentiment graphs (see `src/notebooks/merge-sentiment-graphs.ipynb`).
+
+## Individual scripts
+Python scripts can be run by running:
+
+```
+cd src/scripts
+python3 <file_name.py>
+```
+
+or by importing the modules in a python interpreter in `src/scripts`, for example in `ipython3`:
+
+```py
+import frequency as f
+f.run() # runs frequency code with default parameters
+f.run(overall=True) # runs frequency code on overall data
+f.run(trendline=False) # without trend line
+f.run(selected_topic=3, trendline=False) # for topic 3 and without trend line
+```
 
 # Output
 Final output of the Python script is generated in `src/dataout/`
