@@ -82,9 +82,6 @@ def run(overall=False, selected_topic=11, trendline=True):
 
     # plot frequency graphs
     plot_frequency_time(dates, overall, selected_topic, data_out, trendline)
-    if not overall:
-        # plot merged frequency topic graph
-        plot_frequency_merge_time()
     print("\tOutput available in dataout/general/")
 
 
@@ -128,6 +125,8 @@ def plot_frequency_merge_time():
     '''
         Plot sentiment over time for multiple topics.
         Currently set to topics 1, 5, 6, and 7.
+
+        NOTE: can only run this after topics 1, 5, 6, and 7 have been run by the single_topic_analysis.py code.
     '''
     # get data
     TOPIC_SUBDF_DATA_IN_PREFIX = TOPIC_DATA_IN_PREFIX + "tweet_topic_subdf_topic_"

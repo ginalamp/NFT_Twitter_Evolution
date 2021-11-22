@@ -81,5 +81,5 @@ if __name__ == "__main__":
 
     # tweet frequency
     frequency.run(overall=True)
-    print(f"Running frequency for selected topid {selected_topic}")
+    print(f"Running frequency for selected topic {selected_topic}")
     frequency.run(selected_topic=selected_topic)
