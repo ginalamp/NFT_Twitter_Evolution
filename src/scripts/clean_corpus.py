@@ -62,7 +62,7 @@ def run():
     df.to_csv(SENTIMENT_DATA_OUT, columns = selected_columns)
 
     # cleaning for topic modelling (remove stop words)
-    print("\n\tTopic modelling cleaning...")
+    print("\tTopic modelling cleaning...")
     remove_stop = True
     df['cleaned_tweet'] = df['corpus'].progress_apply(clean_tweet, remove_stop=remove_stop)
 
@@ -71,7 +71,7 @@ def run():
     selected_columns = ["id", "cleaned_tweet"] # BTM algorithm R script file format
     df.to_csv(BTM_DATA_OUT, columns = selected_columns, index=None)
 
-    print("Finished cleaning corpus. The next steps will start in a few moments...")
+    print("Finished cleaning corpus...")
 
 def create_directories():
     '''
@@ -95,7 +95,7 @@ def load_data():
     # import the data
     filename = TWEET_CORPUS_DATA_IN
     print("\tLoading json data...")
-    print("\t\tThis can take a while (about ~15 minutes for ~0.5 million entries)")
+    print("\t\tThis can take a while (about ~5 minutes for ~0.5 million entries on an 8-core CPU Macbook Air M1 2020)")
     print("\t\tGo make yourself a cup of hot thing ;)")
     data = pd.read_json(filename, lines=True)
 
