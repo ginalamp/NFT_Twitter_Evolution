@@ -27,6 +27,8 @@ python3 clean_corpus.py
 ## Run BTM R code
 This is for BTM topic modelling. Currently, it assumes that the number of topics is 11 (as this was determined through using the Elbow Method on the LogLik values on the dataset used).
 
+The needed output based on the `tweets.jsonl`'s cleaned data has been run through the `BTM_implementation.Rmd` code to output `BTM_topics/data/11_model_scores.csv`. If another dataset or number of topics should be used, then the code will need to be run again.
+
 The BTM code is a bit manual currently, but is well documented if you want to automate it a bit into a script.
 * Install dependencies according to imports.
 * Running `LogLik` is set to `False` by default (set to `True` if want to run again). 
@@ -41,7 +43,7 @@ python3 run_scripts.py
 ```
 
 Runs all Python scripts automatically and in order.
-* Precondition: Need BTM R script `<numTopics>_model_scores.csv` output (ie need to run BTM R code first).
+* Precondition: Need BTM R script `data/<numTopics>_model_scores.csv` output (ie need to run BTM R code first).
     - `<numTopics` is based on the number of topics the BTM code was run with. Default is 11.
 * Does not run the Elbow Method.
 
