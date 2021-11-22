@@ -35,14 +35,16 @@ if __name__ == "__main__":
     create_output_directories()
 
     # topic modelling & sentiment cleaning (only clean if haven't cleaned before)
-    # if not os.path.exists('../datain/clean'):
-    if True:
+    sentiment_cleaned_path = '../datain/sentiment/cleaned_tweets_for_sentiment.csv'
+    btm_cleaned_path = '../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv'
+    freq_cleaned_path = '../datain/topic_modelling/cleaned_tweets_largest_community.csv'
+    if not (os.path.exists(sentiment_cleaned_path) and os.path.exists(btm_cleaned_path) and os.path.exists(freq_cleaned_path)):
         clean_corpus.run()
     else:
         print("Skipping cleaning cleaning step (already cleaned data in previous run)")
 
     # topic modelling & sentiment per segment
-    # elbow_method.run() # TODO: this messes with topic analysis graph output
+    # elbow_method.run() # NOTE: this messes with topic analysis graph output
     selected_topic = single_topic_analysis.run()
 
     # sentiment analysis (segments)
