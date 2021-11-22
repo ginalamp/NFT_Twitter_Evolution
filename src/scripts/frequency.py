@@ -14,6 +14,8 @@ OVERALL_DATA_OUT = "../dataout/general/tweet_frequency_overall.pdf" # overall tw
 TOPIC_DATA_IN_PREFIX = "../datain/topic_modelling/" # topic
 TOPIC_DATA_OUT_PREFIX = "../dataout/general/" # topic
 
+GROUP_BY = "date" # NOTE: change this to week/month if want to get the frequency increase in week/month
+
 # file paths for sample data
 # OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets.csv"
 # OVERALL_DATA_OUT = "../dataout/general/Total_tweet_frequency.jpeg"
@@ -52,11 +54,13 @@ def run(overall=False, selected_topic=11, trendline=True):
 
     # split created_at into date and time columns
     df['created_at'] = pd.to_datetime(df['created_at'])
-    df['date'] = df['created_at'].dt.date
+    df['date'] = df['created_at'].dt.date # default grouping
     df['time'] = df['created_at'].dt.time
+    df['month'] = df['created_at'].dt.month # can group by month
+    df['week'] = df['created_at'].dt.week # can group by week
 
     # group tweets by date and count number of entries per day
-    dates = df.groupby('date').count()
+    dates = df.groupby(GROUP_BY).count()
     plot_frequency_time(dates, overall, selected_topic, data_out, trendline)
     print("\tGraph outputs available in dataout/")
 
@@ -93,9 +97,11 @@ def plot_frequency_time(dates, overall, selected_topic, data_out, trendline):
         plt.title('Overall Tweet Frequency over time')
     else:
         plt.title(f'Topic {selected_topic}: Tweet Frequency over time')
-        ax.set_xlabel('Date')
+    
+    # ax.set_xlabel('Date')
 
-    plt.ylabel('Number of Tweets')
+    # plt.ylabel('Number of Tweets')
+    # plt.xlabel('Date')
     plt.savefig(data_out)
     plt.close()
 
