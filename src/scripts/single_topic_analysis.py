@@ -18,6 +18,8 @@ BTM_DATA_OUT_PREFIX = "../dataout/topic_modelling/"
 SENTIMENT_DATA_IN_PREFIX = "../datain/sentiment/"
 SENTIMENT_DATA_OUT_PREFIX = "../dataout/sentiment/"
 
+# no sample file input/output since there are too many and needs editing of BTM R file. Deal with it.
+
 def run(topic_position=0, optimal_num_topics=11):
     '''
         Run functions.
@@ -57,6 +59,7 @@ def topic_modelling(topic_position, optimal_num_topics=11):
     export_topic_ids(df, selected_topic)
     cleaned_community_get_matching_topic_data(selected_topic)
 
+    print("\tOutput available in dataout/topic_modelling/")
     return df, selected_topic
 
 def sentiment_analysis(df, selected_topic):
@@ -84,6 +87,7 @@ def sentiment_analysis(df, selected_topic):
     filename = SENTIMENT_DATA_OUT_PREFIX + f"sentiment_per_segment_topic_{selected_topic}.pdf"
     avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment, False, selected_topic, filename)
 
+    print("\tOutput available in dataout/sentiment/")
     return avg_sentiment
 
 # ******************************************************************************************
@@ -222,8 +226,6 @@ def cleaned_community_get_matching_topic_data(selected_topic):
     # export selected topic to csv
     filename = BTM_DATA_IN_PREFIX + f"tweet_topic_subdf_topic_{selected_topic}.csv"
     selected_topic_btm_df.to_csv(filename)
-
-
 
 # ******************************************************************************************
 # *** Sentiment analysis

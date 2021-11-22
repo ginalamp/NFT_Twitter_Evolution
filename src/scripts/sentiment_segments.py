@@ -43,6 +43,7 @@ def run():
     num_tweets_per_segment = round(len(sub_dfs[0]) / 1000, 1)
     avg_sentiment = sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment)
     print("\tAverage sentiment overall is:", avg_sentiment)
+    print("\tOutput available in dataout/sentiment/")
 
 
 def clean_sentiment_data(df):
