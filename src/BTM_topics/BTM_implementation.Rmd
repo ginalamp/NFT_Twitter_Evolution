@@ -103,7 +103,7 @@ plot(model, which = 11, top_n = 20, title="Topic 11")
 ## Save plots
 ```{r save as vector/pdf with labels}
 # Step 1: Call the pdf command to start the plot
-pdf(file = "model_11_labels_blanktitle.pdf", # The directory you want to save the file in
+pdf(file = "dataout/model_11_labels_blanktitle.pdf", # The directory you want to save the file in
     width = 15, # The width of the plot in inches
     height = 9) # The height of the plot in inches
 
@@ -116,7 +116,7 @@ dev.off()
 
 ```{r save as vector/pdf without labels}
 # Step 1: Call the pdf command to start the plot
-pdf(file = "model_11.pdf",   # The directory you want to save the file in
+pdf(file = "dataout/model_11.pdf",   # The directory you want to save the file in
     width = 15, # The width of the plot in inches
     height = 9) # The height of the plot in inches
 
@@ -129,7 +129,7 @@ dev.off()
 
 ```{r save topic 11 as vector/pdf with labels}
 # Step 1: Call the pdf command to start the plot
-pdf(file = "model_11_alone_10terms.pdf",   # The directory you want to save the file in
+pdf(file = "dataout/model_11_alone_10terms.pdf",   # The directory you want to save the file in
     width = 3, # The width of the plot in inches
     height = 2.7) # The height of the plot in inches
 
@@ -143,23 +143,11 @@ dev.off()
 
 # Write results to files
 ```{r write results to files}
-# phi: a matrix of dimension W x K with one row for each token in the data. This matrix contains the probability of the token given the topic P(w|z). the rownames of the matrix indicate the token w
-write.csv(x=model$phi, file=sprintf("dataout/%d_model_phi.csv", numTopics))
-
+# create output directory if it doesn't exist
+dir.create("data", showWarnings = FALSE)
 # a matrix containing containing P(z|d) - the probability of the topic given the biterms.
 # The matrix has one row for each unique doc_id (context identifier) which contains words part of the dictionary of the BTM model and has K columns, one for each topic.
-write.csv(x=scores, file=sprintf("dataout/%d_model_scores.csv", numTopics))
-
-# theta: a vector with the topic probability p(z) which is determinated by the overall proportions of biterms in it
-write.csv(x=model$theta, file=sprintf("dataout/%d_model_theta.csv", numTopics))
-```
-
-```{r write non-vital results to files}
-# alpha: the symmetric dirichlet prior probability of a topic P(z)
-write.csv(x=model$alpha, file=sprintf("dataout/%d_model_alpha.csv", numTopics))
-
-# beta: the symmetric dirichlet prior probability of a word given the topic P(w|z)
-write.csv(x=model$beta, file=sprintf("dataout/%d_model_beta.csv", numTopics))
+write.csv(x=scores, file=sprintf("data/%d_model_scores.csv", numTopics))
 ```
 
 

@@ -158,7 +158,6 @@ def plot_frequency_merge_time():
     plt.savefig(data_out)
     plt.close()
 
-
 def prep_df_merged_graph(df):
     '''
         Remove unneccessary columns & invalid values, and add date/time columns.

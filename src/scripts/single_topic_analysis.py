@@ -8,10 +8,10 @@ from collections import Counter # count number of tweets
 
 import sentiment_segments # sentiment analysis functions
 
-NUM_SEGMENTS = 40 # decided on 40 segments for largest topic from ../BTM_topics/dataout/11_model_scores.csv
+NUM_SEGMENTS = 40 # decided on 40 segments for largest topic from ../BTM_topics/data/11_model_scores.csv
 
 # Input/output files
-BTM_SCORES_DATA_IN = "../BTM_topics/dataout/"
+BTM_SCORES_DATA_IN = "../BTM_topics/data/"
 BTM_DATA_IN_PREFIX = "../datain/topic_modelling/"
 BTM_DATA_OUT_PREFIX = "../dataout/topic_modelling/"
 
