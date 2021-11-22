@@ -15,7 +15,6 @@ argumentList = sys.argv[1:]
 options = "hcs:" # help, clean, sample
 long_options = ["help", "clean", "sample"]
 
-
 topic_position = 0 # 0 is the largest topic, 1 second largest, etc.
 
 def create_output_directories():
@@ -38,12 +37,6 @@ def create_output_directories():
     if not os.path.exists('../datain/topic_modelling'):
         os.makedirs('../datain/topic_modelling')
 
-def commandline_args():
-    '''
-        Parse command line arguments if they exist.
-    '''
-
-
 if __name__ == "__main__":
     # create output directories
     create_output_directories()
@@ -64,14 +57,13 @@ if __name__ == "__main__":
                 print("Force clean data:")
                 force_clean = True
             elif currentArgument in ("-s", "--sample"):
-                print("Run sample data (instead of full dataset)")
+                print("Run sample data (instead of full dataset) -- Not implemented.")
                 run_sample = True
     except getopt.error as err:
         # output error, and return with an error code
         print(str(err))
 
-
-    # topic modelling & sentiment cleaning (only clean if haven't cleaned before)
+    # topic modelling & sentiment cleaning (forced or only clean if haven't cleaned before)
     sentiment_cleaned_path = '../datain/sentiment/cleaned_tweets_for_sentiment.csv'
     btm_cleaned_path = '../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv'
     freq_cleaned_path = '../datain/topic_modelling/cleaned_tweets_largest_community.csv'
