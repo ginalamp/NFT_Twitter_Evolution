@@ -15,12 +15,20 @@ def create_output_directories():
     '''
         Create output directories for scripts if they don't already exist.
     '''
+    # final output directories
     if not os.path.exists('../dataout/general'):
         os.makedirs('../dataout/general')
     if not os.path.exists('../dataout/sentiment'):
         os.makedirs('../dataout/sentiment')
     if not os.path.exists('../dataout/topic_modelling'):
         os.makedirs('../dataout/topic_modelling')
+    # in process output directories
+    if not os.path.exists('../datain/clean'):
+        os.makedirs('../datain/clean')
+    if not os.path.exists('../datain/sentiment'):
+        os.makedirs('../datain/sentiment')
+    if not os.path.exists('../datain/topic_modelling'):
+        os.makedirs('../datain/topic_modelling')
 
 if __name__ == "__main__":
     # create output directories
