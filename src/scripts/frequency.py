@@ -1,5 +1,8 @@
 '''
-    Plot tweet frequency over time for large dataset
+    Plot tweet frequency over time. 
+    Can run for overall and for a selected topic's dataset (default topic 11).
+
+    Outputs frequency graphs & csv's with more than NUM_TWEETS_THRESHOLD.
 '''
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,6 +18,7 @@ TOPIC_DATA_IN_PREFIX = "../datain/topic_modelling/" # topic
 TOPIC_DATA_OUT_PREFIX = "../dataout/general/" # topic
 
 GROUP_BY = "date" # NOTE: change this to week/month if want to get the frequency increase in week/month
+NUM_TWEETS_THRESHOLD = 15000 # outputs data with GROUP_BY (date) higher than this number
 
 # file paths for sample data
 # OVERALL_DATA_IN = "../datain/topic_modelling/cleaned_tweets.csv"
@@ -31,9 +35,8 @@ def run(overall=False, selected_topic=11, trendline=True):
             trendline: boolean (true if a trendline should be plotted, false otherwise)
     '''
     if not overall:
-        print("Calculating selected topic tweet frequency...")
+        print(f"Calculating selected topic tweet frequency for topic {selected_topic}...")
         print("\tSetting topic I/O files...")
-        # data_in = TOPIC_DATA_IN_PREFIX + f"tweet_sentiment_subdf_topic_{selected_topic}.csv"
         data_in = TOPIC_DATA_IN_PREFIX + f"tweet_topic_subdf_topic_{selected_topic}.csv"
         data_out = TOPIC_DATA_OUT_PREFIX + f"tweet_frequency_topic_{selected_topic}.pdf"
     else:
@@ -57,12 +60,29 @@ def run(overall=False, selected_topic=11, trendline=True):
     df['date'] = df['created_at'].dt.date # default grouping
     df['time'] = df['created_at'].dt.time
     df['month'] = df['created_at'].dt.month # can group by month
-    df['week'] = df['created_at'].dt.week # can group by week
+    df['week'] = df['created_at'].dt.isocalendar().week # can group by week
 
     # group tweets by date and count number of entries per day
     dates = df.groupby(GROUP_BY).count()
+    
+    # get days where there were more than NUM_TWEETS_THRESHOLD tweets
+    top_dates_df = dates[dates['created_at']>NUM_TWEETS_THRESHOLD]
+    if len(top_dates_df):
+        print(f"\tDates there were more than {NUM_TWEETS_THRESHOLD} tweets:")
+        for i in range(len(top_dates_df)):
+            # top date
+            top_date = top_dates_df.iloc[[i]].index[0]
+            print(f"\t\t{top_date}")
+            
+            # output to csv
+            top_date_output = df[df['date'] == top_date]
+            top_date_output.to_csv(f"../dataout/general/{top_date}_tweets.csv")
+    else:
+        print(f"\tThere are no days where the tweet frequency exeeds {NUM_TWEETS_THRESHOLD} tweets")
+
+    # plot frequency graphs
     plot_frequency_time(dates, overall, selected_topic, data_out, trendline)
-    print("\tGraph outputs available in dataout/")
+    print("\tOutput available in dataout/general/")
 
 
 def plot_frequency_time(dates, overall, selected_topic, data_out, trendline):
@@ -98,13 +118,8 @@ def plot_frequency_time(dates, overall, selected_topic, data_out, trendline):
     else:
         plt.title(f'Topic {selected_topic}: Tweet Frequency over time')
     
-    # ax.set_xlabel('Date')
-
-    # plt.ylabel('Number of Tweets')
-    # plt.xlabel('Date')
     plt.savefig(data_out)
     plt.close()
 
 if __name__ == "__main__":
-    #run(selected_topic=1, trendline=False)
     run(overall=True)
