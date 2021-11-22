@@ -9,10 +9,12 @@ See `Twitter_NFT_Evolution_2021.pdf` for the full report.
 python3 -m venv env
 source env/bin/activate
 pip3 install -r requirements.txt
+python3 -m nltk.downloader stopwords
 ```
 1. Create a Python virtual environment with `python3 -m venv env`
 2. Activate the venv with `source env/bin/activate` (it can be deactivated by running `deactivate` or by exiting the terminal)
 3. Install Python dependencies with `pip3 install -r requirements.txt`
+4. Download nltk stopwords with `python3 -m nltk.downloader stopwords`
 
 ## Setup
 ```
