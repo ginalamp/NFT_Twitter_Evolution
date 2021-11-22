@@ -37,7 +37,8 @@ def run(topic_position=0, optimal_num_topics=11):
     avg_sentiment = sentiment_analysis(df, selected_topic)
 
     print(f"\tAverage sentiment for topic {selected_topic} is: {avg_sentiment}")
-
+    print("\tOutput available in dataout/sentiment/")
+    
     return selected_topic
 
 def topic_modelling(topic_position, optimal_num_topics=11):
@@ -87,7 +88,6 @@ def sentiment_analysis(df, selected_topic):
     filename = SENTIMENT_DATA_OUT_PREFIX + f"sentiment_per_segment_topic_{selected_topic}.pdf"
     avg_sentiment = sentiment_segments.sentiment_per_segment(df, sub_dfs, num_segments, num_tweets_per_segment, False, selected_topic, filename)
 
-    print("\tOutput available in dataout/sentiment/")
     return avg_sentiment
 
 # ******************************************************************************************
