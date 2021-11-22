@@ -31,7 +31,7 @@ stop_words.append('rt')
 stop_words.append('nft')
 
 # file paths
-TWEET_CORPUS_DATA_IN = "../datain/clean/largest_community_tweets.jsonl"
+TWEET_CORPUS_DATA_IN = "../datain/clean/tweets.jsonl"
 FREQUENCY_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_largest_community.csv"
 BTM_DATA_OUT = "../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv"
 SENTIMENT_DATA_OUT = "../datain/sentiment/cleaned_tweets_for_sentiment.csv"
