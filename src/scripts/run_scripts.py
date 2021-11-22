@@ -9,6 +9,13 @@ import sentiment_segments # sentiment analysis
 
 import os # creating directories
 
+# command line arguments
+import getopt, sys 
+argumentList = sys.argv[1:]
+options = "hcs:" # help, clean, sample
+long_options = ["help", "clean", "sample"]
+
+
 topic_position = 0 # 0 is the largest topic, 1 second largest, etc.
 
 def create_output_directories():
@@ -22,6 +29,7 @@ def create_output_directories():
         os.makedirs('../dataout/sentiment')
     if not os.path.exists('../dataout/topic_modelling'):
         os.makedirs('../dataout/topic_modelling')
+
     # in process output directories
     if not os.path.exists('../datain/clean'):
         os.makedirs('../datain/clean')
@@ -30,15 +38,44 @@ def create_output_directories():
     if not os.path.exists('../datain/topic_modelling'):
         os.makedirs('../datain/topic_modelling')
 
+def commandline_args():
+    '''
+        Parse command line arguments if they exist.
+    '''
+
+
 if __name__ == "__main__":
     # create output directories
     create_output_directories()
+
+    # command line arguments
+    force_clean = False
+    run_sample = False
+    try:
+        # Parsing argument
+        arguments, _ = getopt.getopt(argumentList, options, long_options)
+        
+        # checking each argument
+        for currentArgument in arguments:
+            if currentArgument in ("-h", "--help"):
+                print("Displaying Help")
+                exit()
+            elif currentArgument in ("-c", "--clean"):
+                print("Force clean data:")
+                force_clean = True
+            elif currentArgument in ("-s", "--sample"):
+                print("Run sample data (instead of full dataset)")
+                run_sample = True
+    except getopt.error as err:
+        # output error, and return with an error code
+        print(str(err))
+
 
     # topic modelling & sentiment cleaning (only clean if haven't cleaned before)
     sentiment_cleaned_path = '../datain/sentiment/cleaned_tweets_for_sentiment.csv'
     btm_cleaned_path = '../datain/topic_modelling/cleaned_tweets_largest_community_btm.csv'
     freq_cleaned_path = '../datain/topic_modelling/cleaned_tweets_largest_community.csv'
-    if not (os.path.exists(sentiment_cleaned_path) and os.path.exists(btm_cleaned_path) and os.path.exists(freq_cleaned_path)):
+    if force_clean or not (os.path.exists(sentiment_cleaned_path) and os.path.exists(btm_cleaned_path) and os.path.exists(freq_cleaned_path)):
         clean_corpus.run()
     else:
         print("Skipping cleaning cleaning step (already cleaned data in previous run)")
