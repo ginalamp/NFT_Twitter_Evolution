@@ -21,6 +21,7 @@ python3 -m nltk.downloader stopwords
 unzip tweets.zip -d src/datain/clean
 cd src/scripts/
 python3 clean_corpus.py
+cd ../..
 ```
 1. Extract `tweets.zip`, and move the file to `datain/clean/`
     - **INPUT:** `tweets.zip` contains a [Twitter v2 Tweet object](https://developer.twitter.com/en/docs/twitter-api/data-dictionary/object-model/tweet) in a **.jsonl** file.
@@ -51,7 +52,7 @@ Runs all Python scripts automatically and in order.
 * Does not run the Elbow Method.
 
 ## Prepping data for frequency/sentiment analysis for all topics
-This is necessary if you wish to run any sentiment or frequency code on any given topic. By default, `run_scripts.py` only includes topic 11.
+This is necessary to run in the Python interpreter if you wish to run any sentiment or frequency code on any given topic. By default, `run_scripts.py` only includes topic 11.
 ```py
 import single_topic_analysis as sta
 for i in range(11):
@@ -59,7 +60,7 @@ for i in range(11):
 ```
 
 ### Running topic frequency on multiple topics
-After running the above, you can get each topic's frequency as well as a merged frequency graph by running the code below. By default, this will merge a graph with topics 1, 5, 6, and 7. To change this, see the `plot_frequency_merge_time()` function in `src/scripts/frequency.py`.
+After running the above, you can get each topic's frequency as well as a merged frequency graph by running the code below in the Python interpreter. By default, this will merge a graph with topics 1, 5, 6, and 7. To change this, see the `plot_frequency_merge_time()` function in `src/scripts/frequency.py`.
 
 ```py
 import frequency as f
@@ -71,14 +72,13 @@ f.plot_frequency_merge_time() # merged frequency graph for topics 1, 5, 6, and 7
 Similarly, the data can also be used to plot merged sentiment graphs (see `src/notebooks/merge-sentiment-graphs.ipynb`).
 
 ## Individual scripts
-Python scripts can be run by running:
+Individual Python scripts can be run by running:
 
 ```
-cd src/scripts
-python3 <file_name.py>
+python3 <file_name>.py
 ```
 
-or by importing the modules in a python interpreter in `src/scripts`, for example in `ipython3`:
+or by importing the modules in a python interpreter in `src/scripts`:
 
 ```py
 import frequency as f
@@ -90,12 +90,11 @@ f.run(selected_topic=3, trendline=False) # for topic 3 and without trend line
 
 # Output
 Final output of the Python script is generated in `src/dataout/`
-* Tweet frequency
+* Tweet frequency over time
 * Sentiment over time
+* Sentiment over time merged graphs
+    - Merged graph output for sentiment can be generated through running the `merge-sentiment-graphs.ipynb` notebook in `src/notebooks/`
 * Topic distribution
-
-Merged graphs
-* Merged graph output for sentiment can be generated through running the `merge-sentiment-graphs.ipynb` notebook in `src/notebooks/`.
 
 BTM topic modelling
 * BTM output can be found in the `BTM_topics/`
